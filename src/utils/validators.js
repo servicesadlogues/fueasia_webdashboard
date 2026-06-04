@@ -1,8 +1,17 @@
 import * as yup from 'yup';
 
+// Max DOB = 18 years ago (minimum age for membership)
+const maxDob = new Date();
+maxDob.setFullYear(maxDob.getFullYear() - 18);
+
 export const registrationSchema = yup.object({
   // Personal
   gender: yup.string().oneOf(['male', 'female'], 'Please select gender').required('Gender is required'),
+  dob: yup.date()
+    .typeError('Please select a valid date of birth')
+    .required('Date of birth is required')
+    .max(maxDob, 'You must be at least 18 years old')
+    .min(new Date('1900-01-01'), 'Please enter a valid date of birth'),
   name: yup.string().min(2, 'Name too short').required('Name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
   mobile: yup.string().min(7, 'Invalid mobile number').required('Mobile is required'),

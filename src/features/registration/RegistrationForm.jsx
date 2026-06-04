@@ -17,7 +17,7 @@ import useRazorpay from '../../hooks/useRazorpay'
 const RegistrationFormInner = () => {
   const navigate = useNavigate()
   const { openPayment } = useRazorpay()
-  const { sessionToken, documentsUploaded, appliedCoupon } = useFormContext()
+  const { sessionToken, appliedCoupon } = useFormContext()
 
   const {
     register,
@@ -34,11 +34,6 @@ const RegistrationFormInner = () => {
   })
 
   const onSubmit = async (data) => {
-    if (!documentsUploaded) {
-      toast.error('Please upload all documents before proceeding.')
-      return
-    }
-
     const currency = 'USD'
     const memberType = 'fueasia'
 

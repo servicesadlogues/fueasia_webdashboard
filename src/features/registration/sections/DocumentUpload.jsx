@@ -20,20 +20,21 @@ const DocumentUpload = () => {
     setDocumentsUploaded(false)
   }
 
+  const hasAnyFile = files.medicalCertificate || files.profilePic || files.pgDegree
+
   const handleUpload = async () => {
-    if (!files.medicalCertificate || !files.profilePic || !files.pgDegree) {
-      toast.error('Please select all three documents before uploading.')
+    if (!hasAnyFile) {
+      toast.info('No documents selected. You may proceed without uploading.')
       return
     }
 
     const formData = new FormData()
-    formData.append('medicalCertificate', files.medicalCertificate)
-    formData.append('profilePic', files.profilePic)
-    formData.append('pgDegree', files.pgDegree)
+    if (files.medicalCertificate) formData.append('medicalCertificate', files.medicalCertificate)
+    if (files.profilePic)         formData.append('profilePic', files.profilePic)
+    if (files.pgDegree)           formData.append('pgDegree', files.pgDegree)
 
     setUploading(true)
     try {
-      // Pass sessionToken as query param — backend saves to uploads/temp/TOKEN/
       await uploadDocuments(formData, sessionToken)
       setDocumentsUploaded(true)
       toast.success('Documents uploaded successfully!')
@@ -46,7 +47,7 @@ const DocumentUpload = () => {
 
   return (
     <div className="section-card">
-      <div className="section-header">Document&apos;s Upload</div>
+      <div className="section-header">Document&apos;s Upload <span className="text-sm font-normal opacity-80">(Optional)</span></div>
       <div className="section-body">
 
         {DOC_FIELDS.map(({ key, label }) => (

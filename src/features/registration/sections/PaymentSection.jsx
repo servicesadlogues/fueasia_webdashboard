@@ -168,10 +168,7 @@ const PaymentSection = ({ register, errors }) => {
               className="accent-primary w-4 h-4 flex-shrink-0"
             />
             <span className="text-sm text-gray-700">
-              I agree with{' '}
-              <a href="#" className="text-primary underline">terms and conditions</a>
-              {' '}and{' '}
-              <a href="#" className="text-blue-600 underline">Privacy policy</a>
+              I agree with terms and conditions and Privacy policy
             </span>
           </label>
           {errors.termsCheck && <p className="error-text">{errors.termsCheck.message}</p>}

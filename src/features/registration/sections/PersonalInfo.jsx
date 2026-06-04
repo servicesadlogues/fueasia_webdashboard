@@ -7,23 +7,39 @@ const PersonalInfo = ({ register, control, errors }) => (
     <div className="section-header">Personal Information</div>
     <div className="section-body">
 
-      {/* Gender */}
-      <div className="mb-5">
-        <label className="label">Gender <span className="text-red-500">*</span></label>
-        <div className="flex gap-6 mt-1">
-          {['male', 'female'].map((g) => (
-            <label key={g} className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="radio"
-                value={g}
-                {...register('gender')}
-                className="accent-primary w-4 h-4"
-              />
-              <span className="text-sm capitalize">{g}</span>
-            </label>
-          ))}
+      {/* Gender + Date of Birth row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+        {/* Gender */}
+        <div>
+          <label className="label">Gender <span className="text-red-500">*</span></label>
+          <div className="flex gap-6 mt-1">
+            {['male', 'female'].map((g) => (
+              <label key={g} className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  value={g}
+                  {...register('gender')}
+                  className="accent-primary w-4 h-4"
+                />
+                <span className="text-sm capitalize">{g}</span>
+              </label>
+            ))}
+          </div>
+          {errors.gender && <p className="error-text">{errors.gender.message}</p>}
         </div>
-        {errors.gender && <p className="error-text">{errors.gender.message}</p>}
+
+        {/* Date of Birth */}
+        <div>
+          <label className="label">Date of Birth <span className="text-red-500">*</span></label>
+          <input
+            type="date"
+            {...register('dob')}
+            max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
+            min="1900-01-01"
+            className="input-field"
+          />
+          {errors.dob && <p className="error-text">{errors.dob.message}</p>}
+        </div>
       </div>
 
       {/* Row 1: Name + Mobile */}
