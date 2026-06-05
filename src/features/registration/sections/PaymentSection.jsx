@@ -7,7 +7,7 @@ const BASE_PRICE_USD = 99
 const PROMO_COUPON = 'FUEGLOBALMEMBER'
 
 const PaymentSection = ({ register, errors }) => {
-  const { appliedCoupon, setAppliedCoupon } = useFormContext()
+  const { appliedCoupon, setAppliedCoupon, captchaVerified, setCaptchaVerified } = useFormContext()
 
   const [couponInput, setCouponInput] = useState('')
   const [couponError, setCouponError] = useState('')
@@ -15,7 +15,6 @@ const PaymentSection = ({ register, errors }) => {
   const [captchaSvg, setCaptchaSvg] = useState('')
   const [captchaToken, setCaptchaToken] = useState('')
   const [captchaInput, setCaptchaInput] = useState('')
-  const [captchaVerified, setCaptchaVerified] = useState(false)
   const [verifyingCaptcha, setVerifyingCaptcha] = useState(false)
 
   const fetchCaptcha = useCallback(async () => {
@@ -213,9 +212,6 @@ const PaymentSection = ({ register, errors }) => {
             )}
           </div>
         </div>
-
-        {/* Hidden field to pass captchaVerified status to parent */}
-        <input type="hidden" {...register('_captchaVerified')} value={captchaVerified ? 'yes' : ''} />
 
       </div>
     </div>

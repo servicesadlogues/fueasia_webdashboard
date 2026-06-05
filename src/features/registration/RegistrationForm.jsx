@@ -104,18 +104,19 @@ const FailedCard = ({ error, onRetry }) => (
 // ─── Main Form ────────────────────────────────────────────────────────────────
 const RegistrationFormInner = () => {
   const { openPayment } = useRazorpay()
-  const { sessionToken, appliedCoupon } = useFormContext()
+  const { sessionToken, appliedCoupon, captchaVerified, onResetForm } = useFormContext()
 
   // null → form | 'loading' → loader | 'success' → success card | 'failed' → failed card
   const [flowStatus, setFlowStatus] = useState(null)
   const [flowData, setFlowData] = useState(null)
   const [flowError, setFlowError] = useState('')
+  // Locks the button once Razorpay modal is open — prevents duplicate payment attempts
+  const [paymentOpened, setPaymentOpened] = useState(false)
 
   const {
     register,
     control,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(registrationSchema),
@@ -126,19 +127,16 @@ const RegistrationFormInner = () => {
     },
   })
 
-  const handleRegisterAnother = () => {
-    setFlowStatus(null)
-    setFlowData(null)
-    setFlowError('')
-    reset()
-  }
-
   const onSubmit = async (data) => {
+    if (!captchaVerified) {
+      toast.error('Please verify the CAPTCHA before proceeding.')
+      return
+    }
+
     const currency = 'USD'
     const memberType = 'fueasia'
 
     try {
-      // 1. Create order with full form data
       const orderRes = await createPaymentOrder({
         ...data,
         memberType,
@@ -147,7 +145,9 @@ const RegistrationFormInner = () => {
         couponCode: appliedCoupon?.code || '',
       })
 
-      // 2. Open Razorpay modal
+      // Lock button before opening modal — prevents double-click / duplicate orders
+      setPaymentOpened(true)
+
       openPayment({
         orderId:  orderRes.orderId,
         amount:   orderRes.amount,
@@ -158,7 +158,6 @@ const RegistrationFormInner = () => {
         mobile:   data.mobile,
 
         onSuccess: async ({ razorpayOrderId, razorpayPaymentId, razorpaySignature }) => {
-          // Show loader immediately — no redirect, no flicker
           setFlowStatus('loading')
           try {
             const regRes = await verifyPayment({ razorpayOrderId, razorpayPaymentId, razorpaySignature })
@@ -176,19 +175,22 @@ const RegistrationFormInner = () => {
         },
 
         onFailure: (msg) => {
+          setPaymentOpened(false)
           setFlowError(msg || 'Payment was not completed. Please try again.')
           setFlowStatus('failed')
         },
       })
     } catch (err) {
+      setPaymentOpened(false)
       toast.error(err.message || 'Something went wrong. Please try again.')
     }
   }
 
   // ── Status-based rendering — no page redirects ────────────────────────────
+  // onResetForm remounts the entire FormProvider tree: new session token, captcha, uploads, coupon, form fields
   if (flowStatus === 'loading') return <LoadingScreen />
-  if (flowStatus === 'success') return <SuccessCard data={flowData} onRegisterAnother={handleRegisterAnother} />
-  if (flowStatus === 'failed')  return <FailedCard error={flowError} onRetry={handleRegisterAnother} />
+  if (flowStatus === 'success') return <SuccessCard data={flowData} onRegisterAnother={onResetForm} />
+  if (flowStatus === 'failed')  return <FailedCard error={flowError} onRetry={onResetForm} />
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -210,8 +212,12 @@ const RegistrationFormInner = () => {
         <PaymentSection register={register} errors={errors} />
 
         <div className="mt-2">
-          <button type="submit" disabled={isSubmitting} className="btn-primary text-base px-8 py-3">
-            {isSubmitting ? 'Processing...' : 'Confirm Payment'}
+          <button
+            type="submit"
+            disabled={isSubmitting || paymentOpened}
+            className="btn-primary text-base px-8 py-3"
+          >
+            {isSubmitting ? 'Processing...' : paymentOpened ? 'Opening Payment...' : 'Confirm Payment'}
           </button>
         </div>
 
@@ -220,10 +226,14 @@ const RegistrationFormInner = () => {
   )
 }
 
-const RegistrationForm = () => (
-  <FormProvider>
-    <RegistrationFormInner />
-  </FormProvider>
-)
+// Key-based remount: incrementing formKey fully resets the FormProvider tree
+const RegistrationForm = () => {
+  const [formKey, setFormKey] = useState(0)
+  return (
+    <FormProvider key={formKey} onResetForm={() => setFormKey((k) => k + 1)}>
+      <RegistrationFormInner />
+    </FormProvider>
+  )
+}
 
 export default RegistrationForm
