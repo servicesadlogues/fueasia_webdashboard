@@ -7,11 +7,11 @@ const RegistrationPage = () => (
     <Header />
     <main className="flex-1 bg-gray-50">
       {/* Banner */}
-      <div className="w-full">
+      <div className="w-full max-w-4xl mx-auto px-4 pt-6 pb-2">
         <img
           src="/banner.png"
           alt="FUE Asia Membership — USD $99 | 10% OFF with FUEGLOBALMEMBER"
-          className="w-full object-cover"
+          className="w-full object-contain rounded-lg"
         />
       </div>
       <RegistrationForm />
