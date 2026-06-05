@@ -1,4 +1,28 @@
-const ProfessionalInfo = ({ register, errors }) => (
+import { Controller } from 'react-hook-form'
+import Select from 'react-select'
+import { countryOptions } from '../../../utils/countries'
+
+const selectStyles = {
+  control: (base, state) => ({
+    ...base,
+    backgroundColor: '#f9fafb',
+    borderColor: state.isFocused ? '#F07800' : '#e5e7eb',
+    boxShadow: 'none',
+    minHeight: '42px',
+    fontSize: '14px',
+    '&:hover': { borderColor: '#F07800' },
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isSelected ? '#F07800' : state.isFocused ? '#fff3e0' : '#fff',
+    color: state.isSelected ? '#fff' : '#374151',
+    fontSize: '14px',
+  }),
+  placeholder: (base) => ({ ...base, color: '#9ca3af', fontSize: '14px' }),
+  singleValue: (base) => ({ ...base, fontSize: '14px' }),
+}
+
+const ProfessionalInfo = ({ register, control, errors }) => (
   <div className="section-card">
     <div className="section-header">Professional Information</div>
     <div className="section-body">
@@ -11,7 +35,20 @@ const ProfessionalInfo = ({ register, errors }) => (
         </div>
         <div>
           <label className="label">Country <span className="text-red-500">*</span></label>
-          <input {...register('country')} className="input-field" placeholder="Country of registration" />
+          <Controller
+            name="country"
+            control={control}
+            render={({ field }) => (
+              <Select
+                options={countryOptions}
+                isSearchable
+                placeholder="Search and select country..."
+                styles={selectStyles}
+                value={countryOptions.find((o) => o.value === field.value) || null}
+                onChange={(selected) => field.onChange(selected ? selected.value : '')}
+              />
+            )}
+          />
           {errors.country && <p className="error-text">{errors.country.message}</p>}
         </div>
       </div>
