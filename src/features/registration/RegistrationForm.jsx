@@ -134,7 +134,7 @@ const RegistrationFormInner = () => {
     }
 
     const currency = 'USD'
-    const memberType = 'fueasia'
+    const memberType = 'fueglobal'
 
     try {
       const orderRes = await createPaymentOrder({
@@ -198,7 +198,7 @@ const RegistrationFormInner = () => {
 
         <div className="mb-8">
           <h2 className="text-navy font-bold text-2xl mb-1">
-            FUE Asia Membership Registration
+            FUE Global Membership Registration
           </h2>
           <p className="text-gray-500 text-sm">
             All fields marked with <span className="text-red-500">*</span> are required.

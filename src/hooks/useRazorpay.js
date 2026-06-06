@@ -23,7 +23,7 @@ const useRazorpay = () => {
       key: keyId,
       amount,
       currency,
-      name: 'FUE Asia',
+      name: 'FUE Global',
       description: 'Membership Registration',
       order_id: orderId,
       prefill: { name, email, contact: mobile },
