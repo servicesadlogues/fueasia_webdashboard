@@ -145,9 +145,33 @@ const RegistrationFormInner = () => {
         couponCode: appliedCoupon?.code || '',
       })
 
-      // Lock button before opening modal — prevents double-click / duplicate orders
       setPaymentOpened(true)
 
+      // Free order (100% coupon) — skip Razorpay modal entirely
+      if (orderRes.isFree) {
+        setFlowStatus('loading')
+        try {
+          const regRes = await verifyPayment({
+            razorpayOrderId:   orderRes.orderId,
+            razorpayPaymentId: '',
+            razorpaySignature: '',
+          })
+          setFlowData({
+            membershipId: regRes.membershipId,
+            expiryDate:   regRes.expiryDate,
+            name:         data.name,
+            email:        data.email,
+          })
+          setFlowStatus('success')
+        } catch (err) {
+          setPaymentOpened(false)
+          setFlowError(err.message || 'Registration failed. Please contact support.')
+          setFlowStatus('failed')
+        }
+        return
+      }
+
+      // Paid order — open Razorpay modal
       openPayment({
         orderId:  orderRes.orderId,
         amount:   orderRes.amount,
