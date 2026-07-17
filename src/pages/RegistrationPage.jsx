@@ -9,7 +9,7 @@ const RegistrationPage = () => (
       {/* Banner */}
       <div className="w-full max-w-4xl mx-auto px-4 pt-6 pb-2">
         <img
-          src="/banner.png"
+          src="/newbanner.jpeg"
           alt="FUE Global Membership — USD $99 | 10% OFF with FUEGLOBALMEMBER"
           className="w-full object-contain rounded-lg"
         />
