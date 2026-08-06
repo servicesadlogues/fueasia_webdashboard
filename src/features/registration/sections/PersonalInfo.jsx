@@ -30,7 +30,7 @@ const PersonalInfo = ({ register, control, errors }) => (
 
         {/* Date of Birth */}
         <div>
-          <label className="label">Date of Birth <span className="text-red-500">*</span></label>
+          <label className="label">Date of Birth</label>
           <input
             type="date"
             {...register('dob')}
