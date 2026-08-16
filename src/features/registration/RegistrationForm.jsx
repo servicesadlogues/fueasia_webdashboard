@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { toast } from 'react-toastify'
+import { notify } from '../../utils/notify'
 
 import { registrationSchema } from '../../utils/validators'
 import { FormProvider, useFormContext } from './FormContext'
@@ -12,24 +13,21 @@ import DocumentUpload from './sections/DocumentUpload'
 import PaymentSection from './sections/PaymentSection'
 
 import { createPaymentOrder, verifyPayment } from '../../services/api'
+import { formatDate } from '../../utils/formatDate'
 import useRazorpay from '../../hooks/useRazorpay'
 
 // ─── Loading Screen ───────────────────────────────────────────────────────────
 const LoadingScreen = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center py-20 px-4">
-    <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-6" />
+    <div className="spinner mb-6" />
     <h3 className="text-navy font-semibold text-xl mb-2">Processing your registration...</h3>
     <p className="text-gray-500 text-sm text-center">Please wait. Do not close or refresh this page.</p>
   </div>
 )
 
 // ─── Success Card ─────────────────────────────────────────────────────────────
-const SuccessCard = ({ data, onRegisterAnother }) => {
-  const formatDate = (d) =>
-    d ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : '—'
-
-  return (
-    <div className="max-w-lg mx-auto px-4 py-16 text-center">
+const SuccessCard = ({ data, onRegisterAnother }) => (
+  <div className="max-w-lg mx-auto px-4 py-16 text-center">
       <div className="bg-white rounded-xl shadow-md p-8">
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -71,10 +69,12 @@ const SuccessCard = ({ data, onRegisterAnother }) => {
         <button onClick={onRegisterAnother} className="btn-primary w-full">
           Register Another Member
         </button>
+        <p className="ds-muted mt-4">
+          <Link to="/login" className="ds-link">Go to member login</Link>
+        </p>
       </div>
     </div>
-  )
-}
+)
 
 // ─── Failed Card ──────────────────────────────────────────────────────────────
 const FailedCard = ({ error, onRetry }) => (
@@ -104,7 +104,7 @@ const FailedCard = ({ error, onRetry }) => (
 // ─── Main Form ────────────────────────────────────────────────────────────────
 const RegistrationFormInner = () => {
   const { openPayment } = useRazorpay()
-  const { sessionToken, appliedCoupon, captchaVerified, onResetForm } = useFormContext()
+  const { sessionToken, appliedCoupon, captchaVerified, captchaPassToken, setCaptchaVerified, setCaptchaPassToken, onResetForm } = useFormContext()
 
   // null → form | 'loading' → loader | 'success' → success card | 'failed' → failed card
   const [flowStatus, setFlowStatus] = useState(null)
@@ -117,6 +117,8 @@ const RegistrationFormInner = () => {
     register,
     control,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(registrationSchema),
@@ -129,7 +131,7 @@ const RegistrationFormInner = () => {
 
   const onSubmit = async (data) => {
     if (!captchaVerified) {
-      toast.error('Please verify the CAPTCHA before proceeding.')
+      notify.error('Please verify the CAPTCHA before proceeding.')
       return
     }
 
@@ -142,6 +144,7 @@ const RegistrationFormInner = () => {
         memberType,
         currency,
         sessionToken,
+        captchaPassToken,
         couponCode: appliedCoupon?.code || '',
       })
 
@@ -155,6 +158,7 @@ const RegistrationFormInner = () => {
             razorpayOrderId:   orderRes.orderId,
             razorpayPaymentId: '',
             razorpaySignature: '',
+            sessionToken,
           })
           setFlowData({
             membershipId: regRes.membershipId,
@@ -206,7 +210,10 @@ const RegistrationFormInner = () => {
       })
     } catch (err) {
       setPaymentOpened(false)
-      toast.error(err.message || 'Something went wrong. Please try again.')
+      if (err.message && /captcha/i.test(err.message)) {
+        setCaptchaVerified(false)
+        setCaptchaPassToken('')
+      }
     }
   }
 
@@ -229,7 +236,7 @@ const RegistrationFormInner = () => {
           </p>
         </div>
 
-        <PersonalInfo register={register} control={control} errors={errors} />
+        <PersonalInfo register={register} control={control} errors={errors} setValue={setValue} watch={watch} />
         <ProfessionalInfo register={register} control={control} errors={errors} />
         <Speciality register={register} control={control} errors={errors} />
         <DocumentUpload />

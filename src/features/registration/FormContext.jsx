@@ -7,6 +7,7 @@ export const FormProvider = ({ children, onResetForm }) => {
   const [documentsUploaded, setDocumentsUploaded] = useState(false)
   const [appliedCoupon, setAppliedCoupon] = useState(null)
   const [captchaVerified, setCaptchaVerified] = useState(false)
+  const [captchaPassToken, setCaptchaPassToken] = useState('')
 
   return (
     <FormContext.Provider value={{
@@ -14,6 +15,7 @@ export const FormProvider = ({ children, onResetForm }) => {
       documentsUploaded, setDocumentsUploaded,
       appliedCoupon, setAppliedCoupon,
       captchaVerified, setCaptchaVerified,
+      captchaPassToken, setCaptchaPassToken,
       onResetForm,
     }}>
       {children}

@@ -2,24 +2,33 @@ import { Controller } from 'react-hook-form'
 import Select from 'react-select'
 import { countryOptions } from '../../../utils/countries'
 
+const token = (name, fallback) => {
+  if (typeof document === 'undefined') return fallback
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
+}
+
 const selectStyles = {
   control: (base, state) => ({
     ...base,
-    backgroundColor: '#f9fafb',
-    borderColor: state.isFocused ? '#F07800' : '#e5e7eb',
+    backgroundColor: token('--color-input', '#f9fafb'),
+    borderColor: state.isFocused ? token('--color-primary', '#F07800') : token('--color-border', '#e5e7eb'),
     boxShadow: 'none',
-    minHeight: '42px',
-    fontSize: '14px',
-    '&:hover': { borderColor: '#F07800' },
+    minHeight: token('--control-h', '42px'),
+    fontSize: token('--text-sm', '14px'),
+    '&:hover': { borderColor: token('--color-primary', '#F07800') },
   }),
   option: (base, state) => ({
     ...base,
-    backgroundColor: state.isSelected ? '#F07800' : state.isFocused ? '#fff3e0' : '#fff',
-    color: state.isSelected ? '#fff' : '#374151',
-    fontSize: '14px',
+    backgroundColor: state.isSelected
+      ? token('--color-primary', '#F07800')
+      : state.isFocused
+        ? token('--color-primary-light', '#fff3e0')
+        : token('--color-surface', '#fff'),
+    color: state.isSelected ? token('--color-on-brand', '#fff') : token('--color-body', '#374151'),
+    fontSize: token('--text-sm', '14px'),
   }),
-  placeholder: (base) => ({ ...base, color: '#9ca3af', fontSize: '14px' }),
-  singleValue: (base) => ({ ...base, fontSize: '14px' }),
+  placeholder: (base) => ({ ...base, color: token('--color-faint', '#9ca3af'), fontSize: token('--text-sm', '14px') }),
+  singleValue: (base) => ({ ...base, fontSize: token('--text-sm', '14px') }),
 }
 
 const ProfessionalInfo = ({ register, control, errors }) => (

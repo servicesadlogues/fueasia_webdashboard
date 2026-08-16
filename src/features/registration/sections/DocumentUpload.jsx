@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { toast } from 'react-toastify'
+import { notify } from '../../../utils/notify'
 import { uploadDocuments } from '../../../services/api'
 import { useFormContext } from '../FormContext'
 
@@ -16,7 +16,18 @@ const DocumentUpload = () => {
   const refs = { medicalCertificate: useRef(), profilePic: useRef(), pgDegree: useRef() }
 
   const handleFileChange = (key) => (e) => {
-    setFiles((prev) => ({ ...prev, [key]: e.target.files[0] || null }))
+    const file = e.target.files[0] || null
+    if (file && file.size > 5 * 1024 * 1024) {
+      notify.error('File too large. Max 5MB per file.')
+      e.target.value = ''
+      return
+    }
+    if (file && !/\.(pdf|jpe?g|png)$/i.test(file.name)) {
+      notify.error('Only PDF, JPG, and PNG files are allowed.')
+      e.target.value = ''
+      return
+    }
+    setFiles((prev) => ({ ...prev, [key]: file }))
     setDocumentsUploaded(false)
   }
 
@@ -24,7 +35,7 @@ const DocumentUpload = () => {
 
   const handleUpload = async () => {
     if (!hasAnyFile) {
-      toast.info('No documents selected. You may proceed without uploading.')
+      notify.info('No documents selected. You may proceed without uploading.')
       return
     }
 
@@ -37,9 +48,9 @@ const DocumentUpload = () => {
     try {
       await uploadDocuments(formData, sessionToken)
       setDocumentsUploaded(true)
-      toast.success('Documents uploaded successfully!')
-    } catch (err) {
-      toast.error(err.message || 'Upload failed. Please try again.')
+      notify.success('Documents uploaded successfully!')
+    } catch {
+      /* interceptor toasts API errors */
     } finally {
       setUploading(false)
     }

@@ -3,10 +3,9 @@ import Footer from '../components/layout/Footer'
 import RegistrationForm from '../features/registration/RegistrationForm'
 
 const RegistrationPage = () => (
-  <div className="min-h-screen flex flex-col">
+  <div className="ds-app">
     <Header />
-    <main className="flex-1 bg-gray-50">
-      {/* Banner */}
+    <main className="ds-app-main">
       <div className="w-full max-w-4xl mx-auto px-4 pt-6 pb-2">
         <img
           src="/newbanner.jpeg"

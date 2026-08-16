@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { toast } from 'react-toastify'
+import { notify } from '../../../utils/notify'
 import { getCaptcha, verifyCaptcha, validateCoupon } from '../../../services/api'
 import { useFormContext } from '../FormContext'
 
@@ -7,7 +7,7 @@ const BASE_PRICE_USD = 99
 const PROMO_COUPON = 'FUEGLOBALMEMBER'
 
 const PaymentSection = ({ register, errors }) => {
-  const { appliedCoupon, setAppliedCoupon, captchaVerified, setCaptchaVerified } = useFormContext()
+  const { appliedCoupon, setAppliedCoupon, captchaVerified, setCaptchaVerified, setCaptchaPassToken } = useFormContext()
 
   const [couponInput, setCouponInput] = useState('')
   const [couponError, setCouponError] = useState('')
@@ -23,7 +23,8 @@ const PaymentSection = ({ register, errors }) => {
     setCaptchaToken(res.token)
     setCaptchaInput('')
     setCaptchaVerified(false)
-  }, [])
+    setCaptchaPassToken('')
+  }, [setCaptchaVerified, setCaptchaPassToken])
 
   useEffect(() => {
     fetchCaptcha()
@@ -40,7 +41,7 @@ const PaymentSection = ({ register, errors }) => {
     try {
       const res = await validateCoupon(code)
       setAppliedCoupon(res.coupon)
-      toast.success(`Coupon applied — ${res.coupon.discountPercent}% off!`)
+      notify.success(`Coupon applied — ${res.coupon.discountPercent}% off!`)
     } catch (err) {
       setAppliedCoupon(null)
       setCouponError(err.message || 'Invalid or expired coupon code.')
@@ -56,14 +57,15 @@ const PaymentSection = ({ register, errors }) => {
   }
 
   const handleVerifyCaptcha = async () => {
-    if (!captchaInput.trim()) return toast.error('Please enter the captcha.')
+    if (!captchaInput.trim()) return notify.error('Please enter the captcha.')
     setVerifyingCaptcha(true)
     try {
-      await verifyCaptcha({ token: captchaToken, answer: captchaInput })
+      const res = await verifyCaptcha({ token: captchaToken, answer: captchaInput })
+      setCaptchaPassToken(res.passToken || '')
       setCaptchaVerified(true)
-      toast.success('Captcha verified!')
-    } catch (err) {
-      toast.error(err.message || 'Incorrect captcha. Please try again.')
+      notify.success('Captcha verified!')
+    } catch {
+      setCaptchaPassToken('')
       fetchCaptcha()
     } finally {
       setVerifyingCaptcha(false)
@@ -75,7 +77,7 @@ const PaymentSection = ({ register, errors }) => {
 
   const handleCopyPromoCoupon = () => {
     navigator.clipboard.writeText(PROMO_COUPON)
-    toast.info(`Coupon code "${PROMO_COUPON}" copied!`)
+    notify.info(`Coupon code "${PROMO_COUPON}" copied!`)
   }
 
   return (
@@ -176,10 +178,15 @@ const PaymentSection = ({ register, errors }) => {
         {/* Captcha */}
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <div
-              className="bg-gray-200 rounded px-3 py-2"
-              dangerouslySetInnerHTML={{ __html: captchaSvg }}
-            />
+            {captchaSvg ? (
+              <img
+                alt="Captcha"
+                src={`data:image/svg+xml;utf8,${encodeURIComponent(captchaSvg)}`}
+                className="bg-gray-200 rounded px-3 py-2 h-14"
+              />
+            ) : (
+              <div className="bg-gray-200 rounded px-3 py-2 h-14 w-40" />
+            )}
             <button
               type="button"
               onClick={fetchCaptcha}

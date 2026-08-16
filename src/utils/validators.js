@@ -1,11 +1,9 @@
 import * as yup from 'yup';
+import { validateMobileNumber } from './mobile';
 
-// Max DOB = 18 years ago (minimum age for membership)
-const maxDob = new Date();
-maxDob.setFullYear(maxDob.getFullYear() - 18);
+const trim = (value) => (value == null ? value : String(value).trim());
 
 export const registrationSchema = yup.object({
-  // Personal
   gender: yup.string().oneOf(['male', 'female'], 'Please select gender').required('Gender is required'),
   dob: yup.date()
     .transform((value, originalValue) => (originalValue === '' ? null : value))
@@ -21,34 +19,39 @@ export const registrationSchema = yup.object({
     })
     .test('age', 'You must be at least 18 years old', (value) => {
       if (value == null) return true;
+      const maxDob = new Date();
+      maxDob.setFullYear(maxDob.getFullYear() - 18);
       return value <= maxDob;
     }),
-  name: yup.string().min(2, 'Name too short').required('Name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  mobile: yup.string().min(7, 'Invalid mobile number').required('Mobile is required'),
-  mobileCountryCode: yup.string().optional(),
-  alternateNumber: yup.string().optional(),
-  institute: yup.string().optional(),
-  designation: yup.string().optional(),
-  address: yup.string().optional(),
-  city: yup.string().optional(),
+  name: yup.string().transform(trim).min(2, 'Name too short').max(150, 'Name is too long').required('Name is required'),
+  email: yup.string().transform(trim).email('Invalid email').max(150, 'Email is too long').required('Email is required'),
+  mobile: yup.string().transform(trim)
+    .required('Mobile is required')
+    .max(20, 'Invalid mobile number')
+    .test('mobile-by-country', function (value) {
+      const message = validateMobileNumber(value, this.parent.mobileCountryCode);
+      return message ? this.createError({ message }) : true;
+    }),
+  mobileCountryCode: yup.string().max(10).optional(),
+  alternateNumber: yup.string().max(20).optional(),
+  institute: yup.string().max(200).optional(),
+  designation: yup.string().max(100).optional(),
+  address: yup.string().max(2000).optional(),
+  city: yup.string().max(100).optional(),
 
-  // Professional
-  medicalNumber: yup.string().required('Medical number is required'),
-  country: yup.string().required('Country is required'),
-  issuingAuthority: yup.string().required('Issuing authority is required'),
+  medicalNumber: yup.string().transform(trim).max(100).required('Medical number is required'),
+  country: yup.string().transform(trim).max(100).required('Country is required'),
+  issuingAuthority: yup.string().transform(trim).max(200).required('Issuing authority is required'),
 
-  // Speciality
-  speciality: yup.string().required('Please select a speciality'),
-  specialityOther: yup.string().when('speciality', {
+  speciality: yup.string().oneOf(['dermatologist', 'plastic_surgeon', 'other'], 'Please select a speciality').required('Please select a speciality'),
+  specialityOther: yup.string().max(100).when('speciality', {
     is: 'other',
-    then: (s) => s.required('Please specify your speciality'),
+    then: (s) => s.transform(trim).required('Please specify your speciality'),
     otherwise: (s) => s.optional(),
   }),
-  otherAssociations: yup.array().of(yup.string()).optional(),
-  refNo: yup.string().optional(),
+  otherAssociations: yup.array().of(yup.string().max(200)).max(20).optional(),
+  refNo: yup.string().max(100).optional(),
 
-  // Payment
   certifyCheck: yup.boolean().oneOf([true], 'You must certify the information').required(),
   termsCheck: yup.boolean().oneOf([true], 'You must agree to terms and conditions').required(),
 });

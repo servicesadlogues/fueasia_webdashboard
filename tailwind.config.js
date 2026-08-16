@@ -5,18 +5,36 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#F07800',
-          hover: '#d96a00',
-          light: '#fff3e0',
-          border: '#ffe0b2',
+          DEFAULT: 'var(--color-primary)',
+          hover: 'var(--color-primary-hover)',
+          light: 'var(--color-primary-light)',
+          border: 'var(--color-primary-border)',
         },
-        navy: '#1a1a2e',
+        navy: 'var(--color-navy)',
+        page: 'var(--color-page)',
+        surface: 'var(--color-surface)',
+        ink: 'var(--color-ink)',
+        muted: 'var(--color-muted)',
+        success: 'var(--color-success)',
+        danger: 'var(--color-danger)',
       },
       fontFamily: {
-        sans: ['Inter', 'Arial', 'sans-serif'],
+        sans: ['var(--font-sans)'],
+      },
+      fontSize: {
+        xs: 'var(--text-xs)',
+        sm: 'var(--text-sm)',
+        base: 'var(--text-base)',
+        lg: 'var(--text-lg)',
+        xl: 'var(--text-xl)',
+        '2xl': 'var(--text-2xl)',
+      },
+      borderRadius: {
+        DEFAULT: 'var(--radius)',
+        lg: 'var(--radius-lg)',
+        xl: 'var(--radius-xl)',
       },
     },
   },
   plugins: [],
 }
-

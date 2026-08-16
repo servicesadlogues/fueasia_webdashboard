@@ -1,32 +1,50 @@
-import axios from 'axios';
+import http, {
+  MEMBER_TOKEN_KEY,
+  MEMBER_REFRESH_KEY,
+  persistMemberSession,
+  clearMemberSession,
+} from './http';
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4000/api',
-  timeout: 30000,
-});
-
-api.interceptors.response.use(
-  (res) => res.data,
-  (err) => Promise.reject(err.response?.data || err)
-);
+export {
+  MEMBER_TOKEN_KEY,
+  MEMBER_REFRESH_KEY,
+  persistMemberSession,
+  clearMemberSession,
+};
 
 export const uploadDocuments = (formData, token) =>
-  api.post(`/members/upload-documents?token=${encodeURIComponent(token)}`, formData, {
+  http.post(`/members/upload-documents?token=${encodeURIComponent(token)}`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 
-export const registerMember = (data) => api.post('/members/register', data);
+export const createPaymentOrder = (data) => http.post('/payments/create-order', data);
 
-export const createPaymentOrder = (data) => api.post('/payments/create-order', data);
+export const verifyPayment = (data) => http.post('/payments/verify', data);
 
-export const verifyPayment = (data) => api.post('/payments/verify', data);
+export const validateCoupon = (code) =>
+  http.post('/coupons/validate', { code }, { skipErrorToast: true });
 
-export const listCoupons = () => api.get('/coupons');
+export const getCaptcha = () => http.get('/captcha', { skipLoader: true });
 
-export const validateCoupon = (code) => api.post('/coupons/validate', { code });
+export const verifyCaptcha = (data) => http.post('/captcha/verify', data);
 
-export const getCaptcha = () => api.get('/captcha');
+export const requestMemberOtp = (membershipId) =>
+  http.post('/auth/request-otp', { membershipId }, { skipErrorToast: true });
 
-export const verifyCaptcha = (data) => api.post('/captcha/verify', data);
+export const verifyMemberOtp = (membershipId, otp) =>
+  http.post('/auth/verify-otp', { membershipId, otp }, { skipErrorToast: true });
 
-export default api;
+export const logoutMember = (refreshToken) =>
+  http.post('/auth/logout', { refreshToken }, { silent: true, skipErrorToast: true });
+
+export const getMemberMe = () => http.get('/auth/me', { silent: true, skipErrorToast: true });
+
+export const getDashboardProfile = () => http.get('/members/me');
+
+export const getDashboardPayments = () =>
+  http.get('/members/me/payments', { skipErrorToast: true });
+
+export const getDashboardDocuments = () =>
+  http.get('/members/me/documents', { skipErrorToast: true });
+
+export default http;

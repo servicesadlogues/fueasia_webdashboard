@@ -27,7 +27,9 @@ const useRazorpay = () => {
       description: 'Membership Registration',
       order_id: orderId,
       prefill: { name, email, contact: mobile },
-      theme: { color: '#F07800' },
+      theme: {
+        color: getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#F07800',
+      },
       handler: (response) => {
         onSuccess({
           razorpayOrderId: response.razorpay_order_id,
