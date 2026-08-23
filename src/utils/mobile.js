@@ -54,16 +54,28 @@ export const normalizeDialCode = (value) => {
 
 export const formatCountryCode = (value) => `+${normalizeDialCode(value)}`
 
+const lengthForDial = (dial) => NATIONAL_LENGTH[dial] || DEFAULT_LENGTH
+
 export const nationalDigits = (mobile, countryCode) => {
   const dial = normalizeDialCode(countryCode)
   const digits = String(mobile || '').replace(/\D/g, '')
-  if (digits.startsWith(dial) && digits.length > dial.length) {
-    return digits.slice(dial.length)
+  const { min, max } = lengthForDial(dial)
+
+  // If digits are already of valid national length (between min and max), don't strip dial code
+  if (digits.length >= min && digits.length <= max) {
+    return digits
   }
+
+  // If digits start with dial code and stripping it yields a valid length
+  if (digits.startsWith(dial) && digits.length > dial.length) {
+    const stripped = digits.slice(dial.length)
+    if (stripped.length >= min) {
+      return stripped
+    }
+  }
+
   return digits
 }
-
-const lengthForDial = (dial) => NATIONAL_LENGTH[dial] || DEFAULT_LENGTH
 
 const mobileErrorMessage = (min, max) =>
   min === max

@@ -1,18 +1,30 @@
 import { useDashboard } from '../dashboardContext'
+import { EmptyState } from '../../../components/ui'
 
 const DashboardGate = ({ children }) => {
   const { loading, error, reload } = useDashboard()
 
-  if (loading) return null
+  if (loading) {
+    return (
+      <EmptyState
+        title="Loading your dashboard"
+        message="Fetching your membership details…"
+        action={<div className="spinner mx-auto" style={{ width: '2.5rem', height: '2.5rem', borderWidth: '3px' }} />}
+      />
+    )
+  }
 
   if (error) {
     return (
-      <div className="section-card max-w-lg">
-        <div className="section-body">
-          <p className="alert-danger mb-4">{error}</p>
-          <button type="button" className="btn-primary" onClick={reload}>Try again</button>
-        </div>
-      </div>
+      <EmptyState
+        title="Could not load dashboard"
+        message={error}
+        action={(
+          <button type="button" className="btn-primary" onClick={reload}>
+            Try again
+          </button>
+        )}
+      />
     )
   }
 

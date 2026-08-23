@@ -24,24 +24,12 @@ export const exportAdminMembers = (params) =>
 
 export const listAdminConferences = () => adminHttp.get('/admin/conferences')
 
-export const createAdminConference = (body) => adminHttp.post('/admin/conferences', body)
+export const createAdminConference = (formData) =>
+  adminHttp.post('/admin/conferences', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
 
 export const updateAdminConference = (id, body) => adminHttp.patch(`/admin/conferences/${id}`, body)
 
-export const getAdminConferenceRegistrations = (id) =>
-  adminHttp.get(`/admin/conferences/${id}/registrations`)
-
-export const addAdminConferenceRegistration = (id, body) =>
-  adminHttp.post(`/admin/conferences/${id}/registrations`, body)
-
-export const listAdminCms = (kind) => adminHttp.get('/admin/cms', { params: kind ? { kind } : {} })
-
-export const createAdminCms = (formData) =>
-  adminHttp.post('/admin/cms', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-
-export const updateAdminCms = (id, body) => adminHttp.patch(`/admin/cms/${id}`, body)
-
-export const deleteAdminCms = (id) => adminHttp.delete(`/admin/cms/${id}`)
+export const deleteAdminConference = (id) => adminHttp.delete(`/admin/conferences/${id}`)
 
 export const listAdminCoupons = () => adminHttp.get('/admin/coupons')
 

@@ -59,7 +59,7 @@ const PersonalInfo = ({ register, control, errors, setValue, watch }) => {
                 <PhoneInput
                   country="in"
                   enableSearch
-                  value={`${dial}${String(value || '').replace(/\D/g, '')}`}
+                  value={`${dial}${nationalDigits(value, dial)}`}
                   onChange={(phone, data) => {
                     const nextDial = data?.dialCode || dial
                     setValue('mobileCountryCode', formatCountryCode(nextDial), { shouldValidate: true })

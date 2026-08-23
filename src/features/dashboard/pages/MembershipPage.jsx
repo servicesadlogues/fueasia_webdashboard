@@ -56,7 +56,6 @@ const MembershipPage = () => {
             items={[
               { label: 'Amount paid', value: formatMoney(profile.amountPaid, profile.currency) },
               { label: 'Currency', value: profile.currency },
-              { label: 'Coupon applied', value: displayValue(profile.couponApplied) },
               { label: 'Payment status', value: displayValue(profile.paymentStatus) },
             ]}
           />

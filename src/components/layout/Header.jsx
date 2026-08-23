@@ -11,7 +11,9 @@ const Header = () => (
           <p className="ds-subtitle">Membership Registration Portal</p>
         </div>
       </div>
-      <Link to="/login" className="ds-link shrink-0">Already a member? Log in</Link>
+      <Link to="/login" className="ds-header-login">
+        Already a member? <span>Log in</span>
+      </Link>
     </div>
   </header>
 )

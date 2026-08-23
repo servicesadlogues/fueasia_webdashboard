@@ -11,6 +11,9 @@ const AdminTopbar = ({ onMenu }) => {
       subtitle="Administrator"
       onMenu={onMenu}
       onLogout={logout}
+      logoutConfirm={{
+        message: 'You will need to sign in again to access the admin dashboard.',
+      }}
       avatar={<div className="ds-avatar" aria-hidden="true">{initials(admin?.name || 'AD')}</div>}
     />
   )

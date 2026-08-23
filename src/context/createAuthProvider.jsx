@@ -35,6 +35,14 @@ export const createAuthProvider = ({
       setUser(userFromLogin(session))
     }, [])
 
+    const updateUser = useCallback((updater) => {
+      setUser((prev) => {
+        if (!prev) return prev
+        const patch = typeof updater === 'function' ? updater(prev) : updater
+        return { ...prev, ...patch }
+      })
+    }, [])
+
     useEffect(() => {
       const access = localStorage.getItem(accessKey)
       const refresh = localStorage.getItem(refreshKey)
@@ -68,8 +76,9 @@ export const createAuthProvider = ({
         isAuthenticated: !!user,
         login,
         logout,
+        updateUser,
       }),
-      [token, user, loading, login, logout]
+      [token, user, loading, login, logout, updateUser]
     )
 
     return <Context.Provider value={value}>{children}</Context.Provider>

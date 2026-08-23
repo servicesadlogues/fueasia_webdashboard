@@ -11,7 +11,7 @@ const AppSidebar = ({ open, onNavigate, title, subtitle, links, footer }) => (
       </div>
     </div>
     <nav className="ds-dash-nav" aria-label={subtitle}>
-      {links.map(({ to, end, label, icon: Icon }) => (
+      {links.map(({ to, end, label, icon: Icon, badge }) => (
         <NavLink
           key={to}
           to={to}
@@ -20,7 +20,12 @@ const AppSidebar = ({ open, onNavigate, title, subtitle, links, footer }) => (
           onClick={onNavigate}
         >
           <Icon />
-          {label}
+          <span className="ds-nav-link-label">{label}</span>
+          {badge > 0 ? (
+            <span className="ds-nav-badge" aria-label={`${badge} upcoming event${badge === 1 ? '' : 's'}`}>
+              {badge > 99 ? '99+' : badge}
+            </span>
+          ) : null}
         </NavLink>
       ))}
     </nav>

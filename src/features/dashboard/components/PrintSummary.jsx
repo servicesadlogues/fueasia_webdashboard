@@ -38,7 +38,6 @@ const PrintSummary = ({ profile, payments }) => {
               { label: 'Valid until', value: formatDate(profile.membershipExpiryDate) },
               { label: 'Validity', value: `${profile.membershipValidityMonths} months` },
               { label: 'Amount paid', value: formatMoney(profile.amountPaid, profile.currency) },
-              { label: 'Coupon', value: displayValue(profile.couponApplied) },
               { label: 'Payment status', value: profile.paymentStatus },
             ]}
           />

@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import RegistrationPage from './pages/RegistrationPage'
 import LoginPage from './pages/LoginPage'
 import RequireAuth from './components/auth/RequireAuth'
@@ -10,6 +10,8 @@ import ProfilePage from './features/dashboard/pages/ProfilePage'
 import MembershipPage from './features/dashboard/pages/MembershipPage'
 import PaymentsPage from './features/dashboard/pages/PaymentsPage'
 import DocumentsPage from './features/dashboard/pages/DocumentsPage'
+import EventsPage from './features/dashboard/pages/EventsPage'
+import EventDetailPage from './features/dashboard/pages/EventDetailPage'
 import AdminLoginPage from './features/admin/pages/AdminLoginPage'
 import AdminForgotPasswordPage from './features/admin/pages/AdminForgotPasswordPage'
 import AdminResetPasswordPage from './features/admin/pages/AdminResetPasswordPage'
@@ -21,10 +23,9 @@ import SunPharmaPage from './features/admin/pages/SunPharmaPage'
 import ActiveMembersPage from './features/admin/pages/ActiveMembersPage'
 import InactiveMembersPage from './features/admin/pages/InactiveMembersPage'
 import ConferencesPage from './features/admin/pages/ConferencesPage'
-import ConferenceDetailPage from './features/admin/pages/ConferenceDetailPage'
 import FinancePage from './features/admin/pages/FinancePage'
-import ContentPage from './features/admin/pages/ContentPage'
 import CouponsPage from './features/admin/pages/CouponsPage'
+import NotFoundRedirect from './components/auth/NotFoundRedirect'
 
 function App() {
   return (
@@ -44,6 +45,8 @@ function App() {
         <Route path="membership" element={<MembershipPage />} />
         <Route path="payments" element={<PaymentsPage />} />
         <Route path="documents" element={<DocumentsPage />} />
+        <Route path="events" element={<EventsPage />} />
+        <Route path="events/:id" element={<EventDetailPage />} />
       </Route>
       <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route path="/admin/forgot-password" element={<AdminForgotPasswordPage />} />
@@ -63,12 +66,10 @@ function App() {
         <Route path="active" element={<ActiveMembersPage />} />
         <Route path="inactive" element={<InactiveMembersPage />} />
         <Route path="conferences" element={<ConferencesPage />} />
-        <Route path="conferences/:id" element={<ConferenceDetailPage />} />
         <Route path="finance" element={<FinancePage />} />
-        <Route path="content" element={<ContentPage />} />
         <Route path="coupons" element={<CouponsPage />} />
       </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<NotFoundRedirect />} />
     </Routes>
   )
 }

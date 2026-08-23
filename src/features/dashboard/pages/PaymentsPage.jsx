@@ -19,7 +19,6 @@ const PaymentsPage = () => {
         <p className="ds-heading mt-1">{formatMoney(profile.amountPaid, profile.currency)}</p>
         <p className="ds-muted mt-1">
           Status: <PaymentStatusBadge status={profile.paymentStatus} />
-          {profile.couponApplied ? ` · Coupon ${profile.couponApplied}` : ''}
         </p>
       </div>
 
@@ -35,7 +34,6 @@ const PaymentsPage = () => {
                   <th>Date</th>
                   <th>Amount</th>
                   <th>Status</th>
-                  <th>Coupon</th>
                   <th>Order ID</th>
                   <th>Payment ID</th>
                 </tr>
@@ -46,7 +44,6 @@ const PaymentsPage = () => {
                     <td>{formatDate(row.createdAt)}</td>
                     <td>{formatMoney(row.amount, row.currency)}</td>
                     <td><PaymentStatusBadge status={row.status} /></td>
-                    <td>{displayValue(row.couponCode)}{row.discountPercent ? ` (${row.discountPercent}%)` : ''}</td>
                     <td className="font-mono text-xs">{row.razorpayOrderId}</td>
                     <td className="font-mono text-xs">{displayValue(row.razorpayPaymentId)}</td>
                   </tr>

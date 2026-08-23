@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { notify } from '../../../utils/notify'
 import AuthSplitLayout from '../../../components/auth/AuthSplitLayout'
 import AuthBusy from '../../../components/auth/AuthBusy'
@@ -10,6 +10,8 @@ import { validateAdminEmail, validateAdminPassword } from '../../../utils/adminA
 const AdminLoginPage = () => {
   const { isAuthenticated, loading, login } = useAdminAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const redirectTo = location.state?.from || '/admin/home'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -18,7 +20,7 @@ const AdminLoginPage = () => {
   if (loading) return <AuthBusy />
 
   if (isAuthenticated) {
-    return <Navigate to="/admin/home" replace />
+    return <Navigate to={redirectTo} replace />
   }
 
   const handleSubmit = async (e) => {
@@ -35,7 +37,7 @@ const AdminLoginPage = () => {
       const res = await loginAdmin(email.trim(), password)
       login(res)
       notify.success('Login successful.')
-      navigate('/admin/home', { replace: true })
+      navigate(redirectTo, { replace: true })
     } catch (err) {
       setError(err.message || 'Could not log in. Please try again.')
     } finally {

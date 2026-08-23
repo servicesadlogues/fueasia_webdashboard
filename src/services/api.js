@@ -13,8 +13,11 @@ export {
 };
 
 export const uploadDocuments = (formData, token) =>
-  http.post(`/members/upload-documents?token=${encodeURIComponent(token)}`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+  http.post('/members/upload-documents', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'x-session-token': token,
+    },
   });
 
 export const createPaymentOrder = (data) => http.post('/payments/create-order', data);
@@ -41,10 +44,22 @@ export const getMemberMe = () => http.get('/auth/me', { silent: true, skipErrorT
 
 export const getDashboardProfile = () => http.get('/members/me');
 
+export const updateMemberProfile = (data) => {
+  const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
+  return http.patch('/members/me', data, isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {});
+};
+
 export const getDashboardPayments = () =>
   http.get('/members/me/payments', { skipErrorToast: true });
 
 export const getDashboardDocuments = () =>
   http.get('/members/me/documents', { skipErrorToast: true });
 
-export default http;
+export const deleteMemberDocument = (key) =>
+  http.delete(`/members/me/documents/${encodeURIComponent(key)}`);
+
+export const listMemberEvents = () =>
+  http.get('/members/me/events', { skipErrorToast: true });
+
+export const getMemberEvent = (id) =>
+  http.get(`/members/me/events/${id}`, { skipErrorToast: true });

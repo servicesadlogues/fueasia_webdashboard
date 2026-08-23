@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { notify } from '../utils/notify'
 import { requestMemberOtp, verifyMemberOtp } from '../services/api'
 import { useAuth } from '../context/AuthContext'
@@ -13,6 +13,8 @@ const OTP_LENGTH = 6
 const LoginPage = () => {
   const { isAuthenticated, loading, login } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const redirectTo = location.state?.from || '/home'
 
   const [membershipId, setMembershipId] = useState('')
   const [step, setStep] = useState('id')
@@ -33,7 +35,7 @@ const LoginPage = () => {
   if (loading) return <AuthBusy />
 
   if (isAuthenticated) {
-    return <Navigate to="/home" replace />
+    return <Navigate to={redirectTo} replace />
   }
 
   const handleSendOtp = async (e) => {
@@ -104,7 +106,7 @@ const LoginPage = () => {
       const res = await verifyMemberOtp(membershipId, code)
       login(res)
       notify.success('Login successful.')
-      navigate('/home', { replace: true })
+      navigate(redirectTo, { replace: true })
     } catch (err) {
       setError(err.message || 'OTP verification failed. Please try again.')
       setOtp(Array(OTP_LENGTH).fill(''))
@@ -148,7 +150,6 @@ const LoginPage = () => {
             className="input-field mb-4"
             value={membershipId}
             onChange={(e) => { setMembershipId(e.target.value.toUpperCase()); setError('') }}
-            placeholder="e.g. FUEGLOBAL202601"
             autoComplete="username"
             autoFocus
           />
