@@ -1,3 +1,5 @@
+import { isInternalPath } from './urls'
+
 const COUPON_RE = /^[A-Z0-9]{4,50}$/
 
 export const validateConferenceForm = (form) => {
@@ -17,7 +19,9 @@ export const validateConferenceForm = (form) => {
 
   const registrationLink = String(form.registrationLink || '').trim()
   if (!registrationLink) return 'Registration link is required.'
+  if (registrationLink.startsWith('//')) return 'Registration link is invalid.'
   if (registrationLink.startsWith('/')) {
+    if (!isInternalPath(registrationLink)) return 'Registration link must be a valid internal path.'
     if (registrationLink.length > 500) return 'Registration link is too long.'
   } else {
     try {

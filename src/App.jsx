@@ -35,7 +35,7 @@ function App() {
       <Route
         path="/home"
         element={(
-          <RequireAuth useAuth={useAuth} loginPath="/login">
+          <RequireAuth useAuth={useAuth} loginPath="/login" homePath="/home">
             <DashboardLayout />
           </RequireAuth>
         )}
@@ -54,7 +54,7 @@ function App() {
       <Route
         path="/admin/home"
         element={(
-          <RequireAuth useAuth={useAdminAuth} loginPath="/admin/login">
+          <RequireAuth useAuth={useAdminAuth} loginPath="/admin/login" homePath="/admin/home">
             <AdminLayout />
           </RequireAuth>
         )}

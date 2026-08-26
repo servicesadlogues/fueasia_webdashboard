@@ -3,6 +3,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { notify } from '../utils/notify'
 import { requestMemberOtp, verifyMemberOtp } from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import { sanitizeRedirectPath } from '../utils/urls'
 import { normalizeMembershipId, validateMembershipId, validateOtp } from '../utils/authValidation'
 import AuthSplitLayout from '../components/auth/AuthSplitLayout'
 import AuthBusy from '../components/auth/AuthBusy'
@@ -14,7 +15,7 @@ const LoginPage = () => {
   const { isAuthenticated, loading, login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const redirectTo = location.state?.from || '/home'
+  const redirectTo = sanitizeRedirectPath(location.state?.from, '/home')
 
   const [membershipId, setMembershipId] = useState('')
   const [step, setStep] = useState('id')

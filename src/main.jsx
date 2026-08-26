@@ -7,6 +7,9 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import { AdminAuthProvider } from './context/AdminAuthContext.jsx'
 import GlobalLoader from './components/feedback/GlobalLoader.jsx'
 import AppToaster from './components/feedback/AppToaster.jsx'
+import { clearLegacyTokenStorage } from './utils/authStorage.js'
+
+clearLegacyTokenStorage()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

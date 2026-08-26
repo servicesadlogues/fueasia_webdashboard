@@ -1,18 +1,9 @@
-import { createHttpClient, persistKeys, clearKeys } from './createHttpClient'
-
-export const ADMIN_TOKEN_KEY = 'fue_admin_token'
-export const ADMIN_REFRESH_KEY = 'fue_admin_refresh'
-
-export const persistAdminSession = persistKeys(ADMIN_TOKEN_KEY, ADMIN_REFRESH_KEY)
-export const clearAdminSession = clearKeys(ADMIN_TOKEN_KEY, ADMIN_REFRESH_KEY)
+import { createHttpClient } from './createHttpClient'
 
 const adminHttp = createHttpClient({
-  tokenKey: ADMIN_TOKEN_KEY,
-  refreshKey: ADMIN_REFRESH_KEY,
-  persist: persistAdminSession,
-  clear: clearAdminSession,
   refreshPath: '/admin/auth/refresh',
   skipRefresh: (url) => /\/admin\/auth\/(refresh|login|forgot-password|reset-password|logout)/.test(url),
+  sessionScope: 'admin',
 })
 
 export const loginAdmin = (email, password) =>
@@ -26,7 +17,7 @@ export const resetAdminPassword = (token, password, confirmPassword) =>
 
 export const getAdminMe = () => adminHttp.get('/admin/auth/me', { silent: true, skipErrorToast: true })
 
-export const logoutAdmin = (refreshToken) =>
-  adminHttp.post('/admin/auth/logout', { refreshToken }, { silent: true, skipErrorToast: true })
+export const logoutAdmin = () =>
+  adminHttp.post('/admin/auth/logout', {}, { silent: true, skipErrorToast: true })
 
 export default adminHttp

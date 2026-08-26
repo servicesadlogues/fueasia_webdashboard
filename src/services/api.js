@@ -1,16 +1,4 @@
-import http, {
-  MEMBER_TOKEN_KEY,
-  MEMBER_REFRESH_KEY,
-  persistMemberSession,
-  clearMemberSession,
-} from './http';
-
-export {
-  MEMBER_TOKEN_KEY,
-  MEMBER_REFRESH_KEY,
-  persistMemberSession,
-  clearMemberSession,
-};
+import http from './http';
 
 export const uploadDocuments = (formData, token) =>
   http.post('/members/upload-documents', formData, {
@@ -37,8 +25,8 @@ export const requestMemberOtp = (membershipId) =>
 export const verifyMemberOtp = (membershipId, otp) =>
   http.post('/auth/verify-otp', { membershipId, otp }, { skipErrorToast: true });
 
-export const logoutMember = (refreshToken) =>
-  http.post('/auth/logout', { refreshToken }, { silent: true, skipErrorToast: true });
+export const logoutMember = () =>
+  http.post('/auth/logout', {}, { silent: true, skipErrorToast: true });
 
 export const getMemberMe = () => http.get('/auth/me', { silent: true, skipErrorToast: true });
 

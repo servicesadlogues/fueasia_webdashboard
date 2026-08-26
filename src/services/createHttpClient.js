@@ -10,25 +10,32 @@ import {
 } from './httpFeedback'
 
 const SESSION_EXPIRED = 'Session expired. Please log in again.'
+const SESSION_EXPIRED_EVENT = 'fue-session-expired'
 
-export const createHttpClient = ({ tokenKey, refreshKey, persist, clear, refreshPath, skipRefresh }) => {
+export const onSessionExpiredEvent = (handler) => {
+  const listener = (event) => handler(event.detail)
+  window.addEventListener(SESSION_EXPIRED_EVENT, listener)
+  return () => window.removeEventListener(SESSION_EXPIRED_EVENT, listener)
+}
+
+const emitSessionExpired = (scope) => {
+  window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT, { detail: scope }))
+}
+
+export const createHttpClient = ({ refreshPath, skipRefresh, sessionScope }) => {
   const client = axios.create({
     baseURL: API_BASE_URL,
     timeout: 30000,
+    withCredentials: true,
   })
 
   let refreshInFlight = null
 
   const refreshAccessToken = () => {
-    const refreshToken = localStorage.getItem(refreshKey)
-    if (!refreshToken) return Promise.reject(new Error('No refresh token'))
     if (!refreshInFlight) {
       refreshInFlight = axios
-        .post(`${API_BASE_URL}${refreshPath}`, { refreshToken }, { timeout: 30000 })
-        .then((res) => {
-          persist(res.data)
-          return res.data
-        })
+        .post(`${API_BASE_URL}${refreshPath}`, {}, { withCredentials: true, timeout: 30000 })
+        .then((res) => res.data)
         .finally(() => {
           refreshInFlight = null
         })
@@ -36,15 +43,7 @@ export const createHttpClient = ({ tokenKey, refreshKey, persist, clear, refresh
     return refreshInFlight
   }
 
-  client.interceptors.request.use((config) => {
-    const next = startRequestFeedback(config)
-    const token = localStorage.getItem(tokenKey)
-    if (token) {
-      next.headers = next.headers || {}
-      next.headers.Authorization = `Bearer ${token}`
-    }
-    return next
-  })
+  client.interceptors.request.use((config) => startRequestFeedback(config))
 
   client.interceptors.response.use(
     (res) => {
@@ -63,13 +62,11 @@ export const createHttpClient = ({ tokenKey, refreshKey, persist, clear, refresh
       if (canRetry) {
         original._retry = true
         try {
-          const data = await refreshAccessToken()
-          original.headers = original.headers || {}
-          original.headers.Authorization = `Bearer ${data.accessToken}`
+          await refreshAccessToken()
           return client.request(original)
         } catch {
           finishRequestFeedback(original)
-          clear()
+          if (sessionScope) emitSessionExpired(sessionScope)
           toastApiError({ message: SESSION_EXPIRED }, original)
           return Promise.reject({ success: false, message: SESSION_EXPIRED })
         }
@@ -84,14 +81,4 @@ export const createHttpClient = ({ tokenKey, refreshKey, persist, clear, refresh
   )
 
   return client
-}
-
-export const persistKeys = (accessKey, refreshKey) => ({ accessToken, refreshToken }) => {
-  if (accessToken) localStorage.setItem(accessKey, accessToken)
-  if (refreshToken) localStorage.setItem(refreshKey, refreshToken)
-}
-
-export const clearKeys = (accessKey, refreshKey) => () => {
-  localStorage.removeItem(accessKey)
-  localStorage.removeItem(refreshKey)
 }

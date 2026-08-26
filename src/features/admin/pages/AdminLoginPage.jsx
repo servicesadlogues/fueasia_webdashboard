@@ -6,12 +6,13 @@ import AuthBusy from '../../../components/auth/AuthBusy'
 import { useAdminAuth } from '../../../context/AdminAuthContext'
 import { loginAdmin } from '../../../services/adminHttp'
 import { validateAdminEmail, validateAdminPassword } from '../../../utils/adminAuthValidation'
+import { sanitizeRedirectPath } from '../../../utils/urls'
 
 const AdminLoginPage = () => {
   const { isAuthenticated, loading, login } = useAdminAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const redirectTo = location.state?.from || '/admin/home'
+  const redirectTo = sanitizeRedirectPath(location.state?.from, '/admin/home')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')

@@ -1,10 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { onSessionExpiredEvent } from '../services/createHttpClient'
 
 export const createAuthProvider = ({
-  accessKey,
-  refreshKey,
-  persist,
-  clear,
   fetchMe,
   logoutApi,
   userFromMe,
@@ -15,25 +12,17 @@ export const createAuthProvider = ({
   const Context = createContext(null)
 
   const Provider = ({ children }) => {
-    const [token, setToken] = useState(() => localStorage.getItem(accessKey) || '')
     const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(
-      !!localStorage.getItem(accessKey) || !!localStorage.getItem(refreshKey)
-    )
+    const [loading, setLoading] = useState(true)
 
     const logout = useCallback(() => {
-      const refreshToken = localStorage.getItem(refreshKey)
-      if (refreshToken) logoutApi(refreshToken).catch(() => {})
-      clear()
-      setToken('')
+      logoutApi().catch(() => {})
       setUser(null)
-    }, [])
+    }, [logoutApi])
 
     const login = useCallback((session) => {
-      persist(session)
-      setToken(session.accessToken)
       setUser(userFromLogin(session))
-    }, [])
+    }, [userFromLogin])
 
     const updateUser = useCallback((updater) => {
       setUser((prev) => {
@@ -44,33 +33,29 @@ export const createAuthProvider = ({
     }, [])
 
     useEffect(() => {
-      const access = localStorage.getItem(accessKey)
-      const refresh = localStorage.getItem(refreshKey)
-      if (!access && !refresh) {
-        setLoading(false)
-        return undefined
-      }
+      return onSessionExpiredEvent((scope) => {
+        if (scope === userKey) setUser(null)
+      })
+    }, [userKey])
+
+    useEffect(() => {
       let cancelled = false
       setLoading(true)
       fetchMe()
         .then((res) => {
-          if (!cancelled) {
-            setUser(userFromMe(res))
-            setToken(localStorage.getItem(accessKey) || '')
-          }
+          if (!cancelled) setUser(userFromMe(res))
         })
         .catch(() => {
-          if (!cancelled) logout()
+          if (!cancelled) setUser(null)
         })
         .finally(() => {
           if (!cancelled) setLoading(false)
         })
       return () => { cancelled = true }
-    }, [logout])
+    }, [fetchMe, userFromMe])
 
     const value = useMemo(
       () => ({
-        token,
         [userKey]: user,
         loading,
         isAuthenticated: !!user,
@@ -78,7 +63,7 @@ export const createAuthProvider = ({
         logout,
         updateUser,
       }),
-      [token, user, loading, login, logout, updateUser]
+      [user, loading, login, logout, updateUser, userKey]
     )
 
     return <Context.Provider value={value}>{children}</Context.Provider>
