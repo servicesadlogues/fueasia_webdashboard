@@ -8,12 +8,13 @@ export const createAuthProvider = ({
   userFromLogin,
   userKey,
   hookName,
+  hasStoredSession,
 }) => {
   const Context = createContext(null)
 
   const Provider = ({ children }) => {
     const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(() => (hasStoredSession ? hasStoredSession() : true))
 
     const logout = useCallback(() => {
       logoutApi().catch(() => {})
@@ -39,6 +40,11 @@ export const createAuthProvider = ({
     }, [userKey])
 
     useEffect(() => {
+      if (hasStoredSession && !hasStoredSession()) {
+        setLoading(false)
+        return undefined
+      }
+
       let cancelled = false
       setLoading(true)
       fetchMe()
@@ -52,7 +58,7 @@ export const createAuthProvider = ({
           if (!cancelled) setLoading(false)
         })
       return () => { cancelled = true }
-    }, [fetchMe, userFromMe])
+    }, [fetchMe, userFromMe, hasStoredSession])
 
     const value = useMemo(
       () => ({

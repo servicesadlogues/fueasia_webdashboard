@@ -22,7 +22,14 @@ const emitSessionExpired = (scope) => {
   window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT, { detail: scope }))
 }
 
-export const createHttpClient = ({ refreshPath, skipRefresh, sessionScope }) => {
+const captureSessionTokens = (tokenStore, data) => {
+  if (data?.accessToken) {
+    tokenStore.set(data.accessToken, data.refreshToken)
+  }
+  return data
+}
+
+export const createHttpClient = ({ tokenStore, refreshPath, skipRefresh, sessionScope }) => {
   const client = axios.create({
     baseURL: API_BASE_URL,
     timeout: 30000,
@@ -32,10 +39,16 @@ export const createHttpClient = ({ refreshPath, skipRefresh, sessionScope }) => 
   let refreshInFlight = null
 
   const refreshAccessToken = () => {
+    const refreshToken = tokenStore.getRefresh()
+    if (!refreshToken) return Promise.reject(new Error('No refresh token'))
     if (!refreshInFlight) {
       refreshInFlight = axios
-        .post(`${API_BASE_URL}${refreshPath}`, {}, { withCredentials: true, timeout: 30000 })
-        .then((res) => res.data)
+        .post(
+          `${API_BASE_URL}${refreshPath}`,
+          { refreshToken },
+          { withCredentials: true, timeout: 30000 }
+        )
+        .then((res) => captureSessionTokens(tokenStore, res.data))
         .finally(() => {
           refreshInFlight = null
         })
@@ -43,13 +56,21 @@ export const createHttpClient = ({ refreshPath, skipRefresh, sessionScope }) => 
     return refreshInFlight
   }
 
-  client.interceptors.request.use((config) => startRequestFeedback(config))
+  client.interceptors.request.use((config) => {
+    const next = startRequestFeedback(config)
+    const token = tokenStore.getAccess()
+    if (token) {
+      next.headers = next.headers || {}
+      next.headers.Authorization = `Bearer ${token}`
+    }
+    return next
+  })
 
   client.interceptors.response.use(
     (res) => {
       finishRequestFeedback(res.config)
       toastApiSuccess(res.config)
-      return res.data
+      return captureSessionTokens(tokenStore, res.data)
     },
     async (err) => {
       if (isRequestCanceled(err)) {
@@ -63,9 +84,12 @@ export const createHttpClient = ({ refreshPath, skipRefresh, sessionScope }) => 
         original._retry = true
         try {
           await refreshAccessToken()
+          original.headers = original.headers || {}
+          original.headers.Authorization = `Bearer ${tokenStore.getAccess()}`
           return client.request(original)
         } catch {
           finishRequestFeedback(original)
+          tokenStore.clear()
           if (sessionScope) emitSessionExpired(sessionScope)
           toastApiError({ message: SESSION_EXPIRED }, original)
           return Promise.reject({ success: false, message: SESSION_EXPIRED })

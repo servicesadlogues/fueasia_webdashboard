@@ -1,4 +1,4 @@
-import http from './http';
+import http, { memberTokenStore } from './http';
 
 export const uploadDocuments = (formData, token) =>
   http.post('/members/upload-documents', formData, {
@@ -26,7 +26,9 @@ export const verifyMemberOtp = (membershipId, otp) =>
   http.post('/auth/verify-otp', { membershipId, otp }, { skipErrorToast: true });
 
 export const logoutMember = () =>
-  http.post('/auth/logout', {}, { silent: true, skipErrorToast: true });
+  http
+    .post('/auth/logout', { refreshToken: memberTokenStore.getRefresh() }, { silent: true, skipErrorToast: true })
+    .finally(() => memberTokenStore.clear());
 
 export const getMemberMe = () => http.get('/auth/me', { silent: true, skipErrorToast: true });
 

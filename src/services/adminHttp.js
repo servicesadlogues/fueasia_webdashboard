@@ -1,6 +1,13 @@
 import { createHttpClient } from './createHttpClient'
+import { createSessionTokenStore } from '../utils/sessionTokens'
+
+export const ADMIN_TOKEN_KEY = 'fue_admin_token'
+export const ADMIN_REFRESH_KEY = 'fue_admin_refresh'
+
+export const adminTokenStore = createSessionTokenStore(ADMIN_TOKEN_KEY, ADMIN_REFRESH_KEY)
 
 const adminHttp = createHttpClient({
+  tokenStore: adminTokenStore,
   refreshPath: '/admin/auth/refresh',
   skipRefresh: (url) => /\/admin\/auth\/(refresh|login|forgot-password|reset-password|logout)/.test(url),
   sessionScope: 'admin',
@@ -18,6 +25,8 @@ export const resetAdminPassword = (token, password, confirmPassword) =>
 export const getAdminMe = () => adminHttp.get('/admin/auth/me', { silent: true, skipErrorToast: true })
 
 export const logoutAdmin = () =>
-  adminHttp.post('/admin/auth/logout', {}, { silent: true, skipErrorToast: true })
+  adminHttp
+    .post('/admin/auth/logout', { refreshToken: adminTokenStore.getRefresh() }, { silent: true, skipErrorToast: true })
+    .finally(() => adminTokenStore.clear())
 
 export default adminHttp
