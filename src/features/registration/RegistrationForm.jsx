@@ -110,7 +110,7 @@ const RegistrationFormInner = () => {
   const [flowStatus, setFlowStatus] = useState(null)
   const [flowData, setFlowData] = useState(null)
   const [flowError, setFlowError] = useState('')
-  // Locks the button once Razorpay modal is open — prevents duplicate payment attempts
+  // Locks the button once Razorpay modal is open - prevents duplicate payment attempts
   const [paymentOpened, setPaymentOpened] = useState(false)
 
   const {
@@ -150,7 +150,7 @@ const RegistrationFormInner = () => {
 
       setPaymentOpened(true)
 
-      // Free order (100% coupon) — skip Razorpay modal entirely
+      // Free order (100% coupon) - skip Razorpay modal entirely
       if (orderRes.isFree) {
         setFlowStatus('loading')
         try {
@@ -175,7 +175,7 @@ const RegistrationFormInner = () => {
         return
       }
 
-      // Paid order — open Razorpay modal
+      // Paid order - open Razorpay modal
       openPayment({
         orderId:  orderRes.orderId,
         amount:   orderRes.amount,
@@ -217,7 +217,7 @@ const RegistrationFormInner = () => {
     }
   }
 
-  // ── Status-based rendering — no page redirects ────────────────────────────
+  // ── Status-based rendering - no page redirects ────────────────────────────
   // onResetForm remounts the entire FormProvider tree: new session token, captcha, uploads, coupon, form fields
   if (flowStatus === 'loading') return <LoadingScreen />
   if (flowStatus === 'success') return <SuccessCard data={flowData} onRegisterAnother={onResetForm} />

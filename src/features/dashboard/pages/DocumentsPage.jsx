@@ -84,7 +84,7 @@ const DocumentsPage = () => {
     <div>
       <PageHeader
         title="Documents"
-        subtitle="Files uploaded with your registration. Links expire after one hour — refresh the page if a link fails."
+        subtitle="Files uploaded with your registration. Links expire after one hour - refresh the page if a link fails."
       />
 
       <div className="section-card">

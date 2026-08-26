@@ -7,9 +7,8 @@ import {
   updateAdminConference,
 } from '../../../services/adminApi'
 import { validateConferenceForm } from '../../../utils/adminFormValidation'
-import PageHeader from '../../../components/ui/PageHeader'
-import ConfirmDialog from '../../../components/ui/ConfirmDialog'
-import { formatDate } from '../../../utils/formatDate'
+import { ConfirmDialog, ImageUploadField, PageHeader } from '../../../components/ui'
+import { formatDate, formatDateOnly } from '../../../utils/formatDate'
 
 const TrashIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" aria-hidden="true">
@@ -22,6 +21,9 @@ const TrashIcon = () => (
 )
 
 const emptyForm = {
+  title: '',
+  startDate: '',
+  location: '',
   registrationLink: '',
   headerImage: null,
   bodyImage: null,
@@ -57,6 +59,9 @@ const ConferencesPage = () => {
       return
     }
     const formData = new FormData()
+    formData.append('title', form.title.trim())
+    formData.append('startDate', form.startDate)
+    formData.append('location', form.location.trim())
     formData.append('registrationLink', form.registrationLink.trim())
     formData.append('headerImage', form.headerImage)
     formData.append('bodyImage', form.bodyImage)
@@ -102,47 +107,77 @@ const ConferencesPage = () => {
     <div>
       <PageHeader
         title="Conferences"
-        subtitle="Upload event posters and share a registration link with members."
+        subtitle="Add event details, posters, and a registration link for members."
       />
 
       <div className="section-card">
         <div className="section-header">New conference</div>
         <form className="section-body" onSubmit={handleCreate}>
           <p className="ds-muted mb-4 text-sm leading-relaxed">
-            Upload a header image and a body image. Members will see them stacked as one poster with no gap between the two.
+            Name, date, and venue are required. Upload a header image and a body image - members see them stacked as one poster.
           </p>
-          <div className="form-grid form-grid-last">
+          <div className="form-grid">
             <div className="md:col-span-2">
-              <label className="label">Header image — top section (JPG or PNG)</label>
+              <label className="label">Event name <span className="required">*</span></label>
               <input
-                className="block"
-                type="file"
-                accept=".jpg,.jpeg,.png"
-                onChange={(e) => setForm((f) => ({ ...f, headerImage: e.target.files?.[0] || null }))}
+                className="input-field"
+                value={form.title}
+                onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                placeholder="FUE Asia Annual Meeting"
+                maxLength={200}
                 required
               />
             </div>
-            <div className="md:col-span-2">
-              <label className="label">Body image — bottom section (JPG or PNG)</label>
+            <div>
+              <label className="label">Date <span className="required">*</span></label>
               <input
-                className="block"
-                type="file"
-                accept=".jpg,.jpeg,.png"
-                onChange={(e) => setForm((f) => ({ ...f, bodyImage: e.target.files?.[0] || null }))}
+                className="input-field"
+                type="date"
+                value={form.startDate}
+                onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
                 required
               />
             </div>
-          </div>
-          <div className="mt-4">
-            <label className="label">Registration link</label>
-            <input
-              className="input-field"
-              value={form.registrationLink}
-              onChange={(e) => setForm((f) => ({ ...f, registrationLink: e.target.value }))}
-              placeholder="https://member.fueasia.org/ or /"
-              required
-            />
-            <p className="ds-caption mt-2">Use a full URL or a site path like / for the membership registration page.</p>
+            <div>
+              <label className="label">Venue <span className="required">*</span></label>
+              <input
+                className="input-field"
+                value={form.location}
+                onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))}
+                placeholder="City, venue, or hotel"
+                maxLength={200}
+                required
+              />
+            </div>
+            <div>
+              <ImageUploadField
+                label="Header image - top section"
+                required
+                hint="JPG or PNG · max 5MB"
+                value={form.headerImage}
+                onChange={(file) => setForm((f) => ({ ...f, headerImage: file }))}
+              />
+            </div>
+            <div>
+              <ImageUploadField
+                label="Body image - bottom section"
+                required
+                hint="JPG or PNG · max 5MB"
+                value={form.bodyImage}
+                onChange={(file) => setForm((f) => ({ ...f, bodyImage: file }))}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="label">Registration link <span className="required">*</span></label>
+              <input
+                className="input-field"
+                value={form.registrationLink}
+                onChange={(e) => setForm((f) => ({ ...f, registrationLink: e.target.value }))}
+                placeholder="https://member.fueasia.org/ or /"
+                required
+              />
+              <p className="ds-caption mt-2">Use a full URL or a site path like / for the membership registration page.</p>
+            </div>
           </div>
           <button type="submit" className="btn-primary mt-4" disabled={saving}>
             {saving ? 'Creating...' : 'Create conference'}
@@ -159,7 +194,9 @@ const ConferencesPage = () => {
             <table className="ds-table">
               <thead>
                 <tr>
-                  <th>Poster</th>
+                  <th>Event</th>
+                  <th>Date</th>
+                  <th>Venue</th>
                   <th>Registration link</th>
                   <th>Created</th>
                   <th>Status</th>
@@ -186,7 +223,9 @@ const ConferencesPage = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="max-w-[12rem] truncate">{row.registrationLink || '—'}</td>
+                    <td>{formatDateOnly(row.startDate)}</td>
+                    <td className="max-w-[12rem]">{row.location || '-'}</td>
+                    <td className="max-w-[12rem] truncate">{row.registrationLink || '-'}</td>
                     <td>{formatDate(row.createdAt)}</td>
                     <td>{row.isActive ? 'Active' : 'Hidden'}</td>
                     <td>

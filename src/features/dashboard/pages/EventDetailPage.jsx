@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { EmptyState } from '../../../components/ui'
 import { getMemberEvent } from '../../../services/api'
+import { isInternalPath } from '../../../utils/urls'
 import { useDashboard } from '../dashboardContext'
-
-const isInternalLink = (url) => String(url || '').startsWith('/')
+import EventMeta from '../components/EventMeta'
 
 const EventDetailPage = () => {
   const { id } = useParams()
@@ -61,17 +61,21 @@ const EventDetailPage = () => {
         <>
           <div className="ds-event-poster ds-event-poster-full">
             {event.headerImageUrl ? (
-              <img src={event.headerImageUrl} alt="" className="ds-event-poster-image ds-event-poster-image-header" />
+              <img src={event.headerImageUrl} alt="" className="ds-event-poster-image" />
             ) : null}
             {event.bodyImageUrl ? (
-              <img src={event.bodyImageUrl} alt="" className="ds-event-poster-image ds-event-poster-image-body" />
+              <img src={event.bodyImageUrl} alt="" className="ds-event-poster-image" />
             ) : null}
+          </div>
+
+          <div className="ds-event-detail-meta">
+            <EventMeta event={event} layout="row" />
           </div>
 
           {registrationLink ? (
             <div className="ds-event-detail-cta">
               <p className="ds-muted text-sm">Ready to register for this event?</p>
-              {isInternalLink(registrationLink) ? (
+              {isInternalPath(registrationLink) ? (
                 <Link to={registrationLink} className="btn-primary min-w-[12rem]">
                   Register now
                 </Link>

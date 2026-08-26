@@ -59,7 +59,6 @@ const AdminLoginPage = () => {
           className="input-field mb-4"
           value={email}
           onChange={(e) => { setEmail(e.target.value); setError('') }}
-          placeholder="admin@fueasia.org"
           autoComplete="username"
           autoFocus
         />
@@ -70,7 +69,6 @@ const AdminLoginPage = () => {
           className="input-field mb-2"
           value={password}
           onChange={(e) => { setPassword(e.target.value); setError('') }}
-          placeholder="Enter your password"
           autoComplete="current-password"
         />
         <div className="mb-4 text-right">

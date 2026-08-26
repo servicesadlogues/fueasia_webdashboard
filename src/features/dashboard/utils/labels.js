@@ -24,14 +24,14 @@ export const MEMBERSHIP_STATUS_LABELS = {
 }
 
 export const displayValue = (value) => {
-  if (value == null || value === '') return '—'
-  if (Array.isArray(value)) return value.length ? value.join(', ') : '—'
+  if (value == null || value === '') return '-'
+  if (Array.isArray(value)) return value.length ? value.join(', ') : '-'
   return String(value)
 }
 
 export const formatMoney = (amount, currency = 'USD') => {
   const n = Number(amount)
-  if (Number.isNaN(n)) return '—'
+  if (Number.isNaN(n)) return '-'
   try {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(n)
   } catch {
@@ -47,9 +47,9 @@ export const initials = (name = '') => {
 }
 
 export const specialityLabel = (profile) => {
-  if (!profile?.speciality) return '—'
+  if (!profile?.speciality) return '-'
   if (profile.speciality === 'other') return profile.specialityOther || 'Other'
   return SPECIALITY_LABELS[profile.speciality] || profile.speciality
 }
 
-export const membershipTypeLabel = (type) => MEMBER_TYPE_LABELS[type] || type || '—'
+export const membershipTypeLabel = (type) => MEMBER_TYPE_LABELS[type] || type || '-'

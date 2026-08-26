@@ -1,19 +1,33 @@
 const COUPON_RE = /^[A-Z0-9]{4,50}$/
 
 export const validateConferenceForm = (form) => {
+  const title = String(form.title || '').trim()
+  if (!title) return 'Event name is required.'
+  if (title.length > 200) return 'Event name is too long.'
+
+  const startDate = String(form.startDate || '').trim()
+  if (!startDate) return 'Date is required.'
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || Number.isNaN(new Date(`${startDate}T00:00:00Z`).getTime())) {
+    return 'Date must be a valid date.'
+  }
+
+  const location = String(form.location || '').trim()
+  if (!location) return 'Venue is required.'
+  if (location.length > 200) return 'Venue is too long.'
+
   const registrationLink = String(form.registrationLink || '').trim()
   if (!registrationLink) return 'Registration link is required.'
   if (registrationLink.startsWith('/')) {
     if (registrationLink.length > 500) return 'Registration link is too long.'
-    return ''
-  }
-  try {
-    const parsed = new URL(registrationLink)
-    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+  } else {
+    try {
+      const parsed = new URL(registrationLink)
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+        return 'Registration link must start with http://, https://, or /.'
+      }
+    } catch {
       return 'Registration link must start with http://, https://, or /.'
     }
-  } catch {
-    return 'Registration link must start with http://, https://, or /.'
   }
   if (!form.headerImage) return 'Header image is required.'
   if (!form.bodyImage) return 'Body image is required.'

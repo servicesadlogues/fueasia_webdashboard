@@ -13,12 +13,12 @@ const CHIP = {
 
 export const MembershipStatusBadge = ({ status }) => (
   <span className={CHIP[status] || 'ds-chip ds-chip-muted'}>
-    {MEMBERSHIP_STATUS_LABELS[status] || status || '—'}
+    {MEMBERSHIP_STATUS_LABELS[status] || status || '-'}
   </span>
 )
 
 export const PaymentStatusBadge = ({ status }) => (
   <span className={CHIP[status] || 'ds-chip ds-chip-muted'}>
-    {PAYMENT_STATUS_LABELS[status] || status || '—'}
+    {PAYMENT_STATUS_LABELS[status] || status || '-'}
   </span>
 )

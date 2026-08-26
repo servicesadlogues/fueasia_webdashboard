@@ -1,10 +1,10 @@
-import { BRAND_LOGO_URL } from '../../constants/brand'
+import { BRAND_LOGO_URL, LOGIN_PANEL_IMAGE_URL } from '../../constants/brand'
 
 const AuthSplitLayout = ({ title, subtitle, children }) => (
   <div className="login-shell">
     <div className="login-frame">
       <div className="login-panel-image" aria-hidden="true">
-        <img src="/login-panel.png" alt="FUE Global medical professionals" />
+        <img src={LOGIN_PANEL_IMAGE_URL} alt="" />
       </div>
       <div className="login-panel-form">
         <img src={BRAND_LOGO_URL} alt="FUE Global" className="login-logo" />

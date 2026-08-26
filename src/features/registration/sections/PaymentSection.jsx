@@ -41,7 +41,7 @@ const PaymentSection = ({ register, errors }) => {
     try {
       const res = await validateCoupon(code)
       setAppliedCoupon(res.coupon)
-      notify.success(`Coupon applied — ${res.coupon.discountPercent}% off!`)
+      notify.success(`Coupon applied - ${res.coupon.discountPercent}% off!`)
     } catch (err) {
       setAppliedCoupon(null)
       setCouponError(err.message || 'Invalid or expired coupon code.')
@@ -129,12 +129,12 @@ const PaymentSection = ({ register, errors }) => {
             <div className="flex items-center gap-2 mb-4 text-green-700 bg-green-50 border border-green-200 rounded px-4 py-2">
               <span className="text-base">&#10003;</span>
               <p className="text-sm font-medium">
-                <strong>{appliedCoupon.code}</strong> applied — <strong>{appliedCoupon.discountPercent}% flat off</strong>
+                <strong>{appliedCoupon.code}</strong> applied - <strong>{appliedCoupon.discountPercent}% flat off</strong>
               </p>
             </div>
           )}
 
-          {/* Price summary — always USD */}
+          {/* Price summary - always USD */}
           <div className="mt-2 text-sm">
             <span className="text-gray-500">Membership Fee: </span>
             {discountPercent > 0 && (

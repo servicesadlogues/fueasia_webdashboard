@@ -1,9 +1,9 @@
 /**
- * Portal liquid-glass layer — admin + member dashboards only.
+ * Portal liquid-glass layer - admin + member dashboards only.
  * Scoped under .ds-dash so registration/public pages stay unchanged.
  */
 
-/* Lock document scroll — only .ds-dash-main scrolls */
+/* Lock document scroll - only .ds-dash-main scrolls */
 html:has(.ds-dash),
 body:has(.ds-dash) {
   height: 100%;
@@ -423,6 +423,20 @@ body:has(.ds-dash) {
   outline: none;
 }
 
+.ds-dash .ds-upload-drop {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: var(--glass-border);
+  border-radius: var(--glass-radius);
+}
+.ds-dash .ds-upload-drop:hover,
+.ds-dash .ds-upload-drop.is-drag {
+  border-color: rgba(240, 120, 0, 0.45);
+  background: rgba(255, 243, 224, 0.65);
+}
+.ds-dash .ds-upload-drop.is-filled {
+  background: var(--glass-bg-strong);
+}
+
 /* Modals */
 .ds-modal-backdrop {
   background: rgba(15, 23, 42, 0.45);
@@ -452,6 +466,21 @@ body:has(.ds-dash) {
 .ds-dash .ds-event-card:hover {
   box-shadow: var(--glass-shadow-lg);
   border-color: rgba(240, 120, 0, 0.3);
+}
+
+.ds-dash .ds-event-card:hover .ds-event-meta-name {
+  color: var(--color-primary);
+}
+
+.ds-dash .ds-event-card-footer {
+  background: transparent;
+  border-top-color: var(--glass-border);
+}
+
+.ds-dash .ds-event-detail-meta {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur));
+  border-top: 1px solid var(--glass-border);
 }
 
 .ds-dash .ds-event-detail-toolbar {

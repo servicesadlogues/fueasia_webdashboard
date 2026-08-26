@@ -8,7 +8,7 @@ const PrintSummary = ({ profile, payments }) => {
   if (!profile) return null
   return (
     <div className="ds-print-only">
-      <h1 className="ds-display mb-2">FUE Global — Membership summary</h1>
+      <h1 className="ds-display mb-2">FUE Global - Membership summary</h1>
       <p className="ds-muted mb-6">{profile.membershipId}</p>
       <div className="mb-6">
         <MembershipCard profile={profile} />

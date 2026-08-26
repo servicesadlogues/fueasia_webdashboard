@@ -21,7 +21,7 @@ const MembershipCard = ({ profile }) => (
         <p className="mt-1 text-2xl font-bold tracking-wide text-primary">{profile.membershipId}</p>
         <p className="mt-3 text-lg font-semibold">{profile.name}</p>
         <p className="mt-1 text-xs text-white/70">
-          Valid {formatDate(profile.membershipStartDate)} — {formatDate(profile.membershipExpiryDate)}
+          Valid {formatDate(profile.membershipStartDate)} - {formatDate(profile.membershipExpiryDate)}
         </p>
       </div>
     </div>
