@@ -1,11 +1,8 @@
 import { Controller } from 'react-hook-form'
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
-import { formatCountryCode, nationalDigits } from '../../../utils/mobile'
+import { MobilePhoneField } from '../../../components/ui'
 
 const PersonalInfo = ({ register, control, errors, setValue, watch }) => {
   const countryCode = watch('mobileCountryCode') || '+91'
-  const dial = String(countryCode).replace(/\D/g, '') || '91'
 
   return (
     <div className="section-card">
@@ -56,16 +53,11 @@ const PersonalInfo = ({ register, control, errors, setValue, watch }) => {
               name="mobile"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <PhoneInput
-                  country="in"
-                  enableSearch
-                  value={`${dial}${nationalDigits(value, dial)}`}
-                  onChange={(phone, data) => {
-                    const nextDial = data?.dialCode || dial
-                    setValue('mobileCountryCode', formatCountryCode(nextDial), { shouldValidate: true })
-                    onChange(nationalDigits(phone, nextDial))
-                  }}
-                  inputProps={{ name: 'mobile' }}
+                <MobilePhoneField
+                  value={value}
+                  onChange={onChange}
+                  countryCode={countryCode}
+                  onCountryCodeChange={(code) => setValue('mobileCountryCode', code, { shouldValidate: true })}
                 />
               )}
             />

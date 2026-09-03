@@ -1,35 +1,5 @@
 import { Controller } from 'react-hook-form'
-import Select from 'react-select'
-import { countryOptions } from '../../../utils/countries'
-
-const token = (name, fallback) => {
-  if (typeof document === 'undefined') return fallback
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
-}
-
-const selectStyles = {
-  control: (base, state) => ({
-    ...base,
-    backgroundColor: token('--color-input', '#f9fafb'),
-    borderColor: state.isFocused ? token('--color-primary', '#F07800') : token('--color-border', '#e5e7eb'),
-    boxShadow: 'none',
-    minHeight: token('--control-h', '42px'),
-    fontSize: token('--text-sm', '14px'),
-    '&:hover': { borderColor: token('--color-primary', '#F07800') },
-  }),
-  option: (base, state) => ({
-    ...base,
-    backgroundColor: state.isSelected
-      ? token('--color-primary', '#F07800')
-      : state.isFocused
-        ? token('--color-primary-light', '#fff3e0')
-        : token('--color-surface', '#fff'),
-    color: state.isSelected ? token('--color-on-brand', '#fff') : token('--color-body', '#374151'),
-    fontSize: token('--text-sm', '14px'),
-  }),
-  placeholder: (base) => ({ ...base, color: token('--color-faint', '#9ca3af'), fontSize: token('--text-sm', '14px') }),
-  singleValue: (base) => ({ ...base, fontSize: token('--text-sm', '14px') }),
-}
+import { CountrySelect } from '../../../components/ui'
 
 const ProfessionalInfo = ({ register, control, errors }) => (
   <div className="section-card">
@@ -48,13 +18,9 @@ const ProfessionalInfo = ({ register, control, errors }) => (
             name="country"
             control={control}
             render={({ field }) => (
-              <Select
-                options={countryOptions}
-                isSearchable
-                placeholder="Search and select country..."
-                styles={selectStyles}
-                value={countryOptions.find((o) => o.value === field.value) || null}
-                onChange={(selected) => field.onChange(selected ? selected.value : '')}
+              <CountrySelect
+                value={field.value}
+                onChange={field.onChange}
               />
             )}
           />

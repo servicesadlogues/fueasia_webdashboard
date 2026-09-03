@@ -1,47 +1,13 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { useForm, Controller, useWatch } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import Select from 'react-select'
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
 
 import { profileSchema } from '../../../utils/validators'
-import { countryOptions } from '../../../utils/countries'
-import { formatCountryCode, nationalDigits } from '../../../utils/mobile'
 import { notify } from '../../../utils/notify'
-import PageHeader from '../../../components/ui/PageHeader'
+import { CountrySelect, MobilePhoneField, PageHeader } from '../../../components/ui'
 import Avatar from '../components/Avatar'
 import { useDashboard } from '../dashboardContext'
 import { SPECIALITY_OPTIONS, ASSOCIATION_OPTIONS } from '../utils/profileOptions'
-
-const token = (name, fallback) => {
-  if (typeof document === 'undefined') return fallback
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
-}
-
-const selectStyles = {
-  control: (base, state) => ({
-    ...base,
-    backgroundColor: token('--color-input', '#f9fafb'),
-    borderColor: state.isFocused ? token('--color-primary', '#F07800') : token('--color-border', '#e5e7eb'),
-    boxShadow: 'none',
-    minHeight: token('--control-h', '42px'),
-    fontSize: token('--text-sm', '14px'),
-    '&:hover': { borderColor: token('--color-primary', '#F07800') },
-  }),
-  option: (base, state) => ({
-    ...base,
-    backgroundColor: state.isSelected
-      ? token('--color-primary', '#F07800')
-      : state.isFocused
-        ? token('--color-primary-light', '#fff3e0')
-        : token('--color-surface', '#fff'),
-    color: state.isSelected ? token('--color-on-brand', '#fff') : token('--color-body', '#374151'),
-    fontSize: token('--text-sm', '14px'),
-  }),
-  placeholder: (base) => ({ ...base, color: token('--color-faint', '#9ca3af'), fontSize: token('--text-sm', '14px') }),
-  singleValue: (base) => ({ ...base, fontSize: token('--text-sm', '14px') }),
-}
 
 const ProfilePage = () => {
   const { profile, documents, photoUrl, updateProfile } = useDashboard()
@@ -106,7 +72,6 @@ const ProfilePage = () => {
 
   const speciality = useWatch({ control, name: 'speciality' })
   const countryCode = watch('mobileCountryCode') || '+91'
-  const dial = String(countryCode).replace(/\D/g, '') || '91'
 
   const handlePhotoSelect = (e) => {
     const file = e.target.files?.[0]
@@ -334,17 +299,12 @@ const ProfilePage = () => {
                   name="mobile"
                   control={control}
                   render={({ field: { onChange, value } }) => (
-                    <PhoneInput
-                      country="in"
-                      enableSearch
+                    <MobilePhoneField
+                      value={value}
+                      onChange={onChange}
+                      countryCode={countryCode}
+                      onCountryCodeChange={(code) => setValue('mobileCountryCode', code, { shouldValidate: true })}
                       disabled={!editing}
-                      value={`${dial}${nationalDigits(value, dial)}`}
-                      onChange={(phone, data) => {
-                        const nextDial = data?.dialCode || dial
-                        setValue('mobileCountryCode', formatCountryCode(nextDial), { shouldValidate: true })
-                        onChange(nationalDigits(phone, nextDial))
-                      }}
-                      inputProps={{ name: 'mobile', disabled: !editing }}
                     />
                   )}
                 />
@@ -413,14 +373,11 @@ const ProfilePage = () => {
                   name="country"
                   control={control}
                   render={({ field }) => (
-                    <Select
-                      options={countryOptions}
-                      isSearchable
+                    <CountrySelect
+                      value={field.value}
+                      onChange={field.onChange}
                       isDisabled={!editing}
                       placeholder="Search and select country..."
-                      styles={selectStyles}
-                      value={countryOptions.find((o) => o.value === field.value) || null}
-                      onChange={(selected) => field.onChange(selected ? selected.value : '')}
                     />
                   )}
                 />

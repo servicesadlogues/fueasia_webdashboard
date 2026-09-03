@@ -77,6 +77,22 @@ export const nationalDigits = (mobile, countryCode) => {
   return digits
 }
 
+/**
+ * react-phone-input-2 always emits digits that include the dial code.
+ * Always strip it so backspace/delete can shorten an incomplete number.
+ */
+export const nationalFromPhoneInput = (phone, countryCode) => {
+  const dial = normalizeDialCode(countryCode)
+  const digits = String(phone || '').replace(/\D/g, '')
+  return digits.startsWith(dial) ? digits.slice(dial.length) : digits
+}
+
+export const toPhoneInputValue = (national, countryCode) => {
+  const dial = normalizeDialCode(countryCode)
+  const digits = String(national || '').replace(/\D/g, '')
+  return `${dial}${digits}`
+}
+
 const mobileErrorMessage = (min, max) =>
   min === max
     ? `Enter a valid ${min}-digit mobile number.`

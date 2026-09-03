@@ -1116,5 +1116,65 @@
   color: var(--color-navy);
 }
 .Toastify__toast-container {
-  z-index: 90;
+  z-index: 9999;
+}
+
+/* Opaque toasts — readable on registration and portals */
+.ds-toaster .Toastify__toast {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+  color: #0f172a !important;
+  font-weight: 600;
+  padding: 0.9rem 1rem !important;
+  min-height: auto !important;
+  opacity: 1 !important;
+}
+
+.ds-toaster .Toastify__toast-body {
+  color: inherit !important;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.ds-toaster .Toastify__close-button {
+  color: #0f172a !important;
+  opacity: 0.65;
+}
+
+.ds-toaster .Toastify__toast--success {
+  background: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  border-left: 4px solid var(--color-success) !important;
+  color: #065f46 !important;
+}
+
+.ds-toaster .Toastify__toast--error {
+  background: #fef2f2 !important;
+  border-color: #fecaca !important;
+  border-left: 4px solid var(--color-danger) !important;
+  color: #991b1b !important;
+}
+
+.ds-toaster .Toastify__toast--warning {
+  background: #fffbeb !important;
+  border-color: #fde68a !important;
+  border-left: 4px solid var(--color-pending) !important;
+  color: #92400e !important;
+}
+
+.ds-toaster .Toastify__toast--info {
+  background: #eff6ff !important;
+  border-color: #bfdbfe !important;
+  border-left: 4px solid #3b82f6 !important;
+  color: #1e3a8a !important;
+}
+
+.ds-toaster .Toastify__progress-bar {
+  background: var(--color-primary) !important;
+  height: 3px !important;
+  opacity: 1 !important;
 }
