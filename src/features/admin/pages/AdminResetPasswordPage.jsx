@@ -4,6 +4,7 @@ import { notify } from '../../../utils/notify'
 import AuthSplitLayout from '../../../components/auth/AuthSplitLayout'
 import { resetAdminPassword } from '../../../services/adminHttp'
 import { validateNewAdminPassword } from '../../../utils/adminAuthValidation'
+import { PasswordField } from '../../../components/ui'
 
 const AdminResetPasswordPage = () => {
   const [token] = useState(() => String(new URLSearchParams(window.location.search).get('token') || '').trim())
@@ -49,20 +50,18 @@ const AdminResetPasswordPage = () => {
       {error && <p className="alert-danger mb-4" role="alert">{error}</p>}
       <form onSubmit={handleSubmit} noValidate>
         <label className="label" htmlFor="newPassword">New password</label>
-        <input
+        <PasswordField
           id="newPassword"
-          type="password"
-          className="input-field mb-4"
+          className="mb-4"
           value={password}
           onChange={(e) => { setPassword(e.target.value); setError('') }}
           autoComplete="new-password"
           autoFocus
         />
         <label className="label" htmlFor="confirmPassword">Confirm password</label>
-        <input
+        <PasswordField
           id="confirmPassword"
-          type="password"
-          className="input-field mb-4"
+          className="mb-4"
           value={confirmPassword}
           onChange={(e) => { setConfirmPassword(e.target.value); setError('') }}
           autoComplete="new-password"

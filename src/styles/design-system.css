@@ -229,6 +229,32 @@
     border-color: var(--focus-ring);
   }
   .input-field:disabled { opacity: 0.6; cursor: not-allowed; }
+  .ds-password-field {
+    position: relative;
+    width: 100%;
+  }
+  .ds-password-field .input-field {
+    padding-right: 2.75rem;
+  }
+  .ds-password-field-toggle.ds-icon-btn {
+    position: absolute;
+    top: 50%;
+    right: 0.25rem;
+    transform: translateY(-50%);
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    background: transparent;
+    color: var(--color-muted);
+  }
+  .ds-password-field-toggle.ds-icon-btn:hover:not(:disabled) {
+    background: rgba(15, 23, 42, 0.06);
+    color: var(--color-navy);
+  }
+  .ds-password-field-toggle.ds-icon-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   .profile-readonly .input-field:disabled,
   .profile-readonly .react-tel-input input:disabled {
     opacity: 1;

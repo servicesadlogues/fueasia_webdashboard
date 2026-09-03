@@ -7,6 +7,7 @@ import { useAdminAuth } from '../../../context/AdminAuthContext'
 import { loginAdmin } from '../../../services/adminHttp'
 import { validateAdminEmail, validateAdminPassword } from '../../../utils/adminAuthValidation'
 import { sanitizeRedirectPath } from '../../../utils/urls'
+import { PasswordField } from '../../../components/ui'
 
 const AdminLoginPage = () => {
   const { isAuthenticated, loading, login } = useAdminAuth()
@@ -64,10 +65,9 @@ const AdminLoginPage = () => {
           autoFocus
         />
         <label className="label" htmlFor="adminPassword">Password</label>
-        <input
+        <PasswordField
           id="adminPassword"
-          type="password"
-          className="input-field mb-2"
+          className="mb-2"
           value={password}
           onChange={(e) => { setPassword(e.target.value); setError('') }}
           autoComplete="current-password"
