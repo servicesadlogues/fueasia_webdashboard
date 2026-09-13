@@ -36,3 +36,14 @@ export const listAdminCoupons = () => adminHttp.get('/admin/coupons')
 export const createAdminCoupon = (body) => adminHttp.post('/admin/coupons', body)
 
 export const updateAdminCoupon = (id, body) => adminHttp.patch(`/admin/coupons/${id}`, body)
+
+export const listAdminSpeakers = (params, config = {}) =>
+  adminHttp.get('/admin/speakers', { params, ...config })
+
+export const getAdminSpeaker = (id) =>
+  adminHttp.get(`/admin/speakers/${encodeURIComponent(id)}`)
+
+export const getAdminSpeakerDocuments = (id) =>
+  adminHttp.get(`/admin/speakers/${encodeURIComponent(id)}/documents`, {
+    skipErrorToast: true,
+  })

@@ -105,3 +105,37 @@ export const profileSchema = yup.object({
   otherAssociations: yup.array().of(yup.string().max(200)).max(20).optional(),
   refNo: yup.string().max(100).optional(),
 });
+
+const requiredCheckbox = (message) =>
+  yup.boolean().oneOf([true], message).required(message);
+
+export const speakerSubmissionSchema = yup.object({
+  fullName: yup.string().transform(trim).min(2, 'Full name is required').max(200, 'Full name is too long').required('Full name is required'),
+  contactEmail: yup.string().transform(trim).email('Invalid email').max(150, 'Email is too long').required('Contact email is required'),
+  preferredName: yup.string().transform(trim).max(200).optional(),
+  title: yup.string().max(50).optional(),
+  designation: yup.string().max(200).optional(),
+  organization: yup.string().max(200).optional(),
+  nationality: yup.string().max(100).optional(),
+  uaeResident: yup.string().max(10).optional(),
+  contactPhone: yup.string().max(30).optional(),
+  instagram: yup.string().max(300).optional(),
+  facebook: yup.string().max(300).optional(),
+  linkedin: yup.string().max(300).optional(),
+  youtube: yup.string().max(300).optional(),
+  twitter: yup.string().max(300).optional(),
+  shortBio: yup.string().max(10000).optional(),
+  topics: yup.array().of(
+    yup.object({
+      topic: yup.string().max(300).optional(),
+      abstract: yup.string().max(5000).optional(),
+      sessionLecture: yup.boolean().optional(),
+      sessionWorkshop: yup.boolean().optional(),
+    })
+  ).max(4).optional(),
+  agreementScientific: requiredCheckbox('You must confirm your presentation is scientific/non-commercial'),
+  agreementPhotoBio: requiredCheckbox('You must consent to photo and bio usage'),
+  agreementPresentation: requiredCheckbox('You must agree to provide your final presentation by the deadline'),
+  agreementDataStorage: requiredCheckbox('You must consent to data storage and processing'),
+  profileCompleteConfirmed: requiredCheckbox('You must confirm your profile is complete before saving'),
+});

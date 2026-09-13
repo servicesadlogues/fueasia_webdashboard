@@ -4,3 +4,5 @@ export const BRAND_LOGO_URL =
 export const LOGIN_PANEL_IMAGE_URL = '/images/member-login-banner.jpg'
 
 export const EVENT_CARD_THUMBNAIL_URL = '/images/event-card-thumbnail.jpg'
+
+export const SPEAKER_BANNER_URL = '/images/speaker-top-banner.jpg'

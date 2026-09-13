@@ -4,6 +4,7 @@ import {
   CreditCard,
   FileText,
   LayoutDashboard,
+  Mic2,
   Users,
   UserCircle,
   Wallet,
@@ -22,4 +23,5 @@ export const PortalIcons = {
   users: (props) => <Users {...base} {...props} />,
   finance: (props) => <Wallet {...base} {...props} />,
   coupons: (props) => <BadgePercent {...base} {...props} />,
+  speakers: (props) => <Mic2 {...base} {...props} />,
 }

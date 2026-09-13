@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import RegistrationPage from './pages/RegistrationPage'
+import SpeakerSubmissionPage from './pages/SpeakerSubmissionPage'
 import LoginPage from './pages/LoginPage'
 import RequireAuth from './components/auth/RequireAuth'
 import { useAuth } from './context/AuthContext'
@@ -25,12 +26,15 @@ import InactiveMembersPage from './features/admin/pages/InactiveMembersPage'
 import ConferencesPage from './features/admin/pages/ConferencesPage'
 import FinancePage from './features/admin/pages/FinancePage'
 import CouponsPage from './features/admin/pages/CouponsPage'
+import SpeakerListPage from './features/admin/pages/SpeakerListPage'
+import SpeakerDetailPage from './features/admin/pages/SpeakerDetailPage'
 import NotFoundRedirect from './components/auth/NotFoundRedirect'
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<RegistrationPage />} />
+      <Route path="/speakers" element={<SpeakerSubmissionPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/home"
@@ -66,6 +70,8 @@ function App() {
         <Route path="active" element={<ActiveMembersPage />} />
         <Route path="inactive" element={<InactiveMembersPage />} />
         <Route path="conferences" element={<ConferencesPage />} />
+        <Route path="speakers" element={<SpeakerListPage />} />
+        <Route path="speakers/:id" element={<SpeakerDetailPage />} />
         <Route path="finance" element={<FinancePage />} />
         <Route path="coupons" element={<CouponsPage />} />
       </Route>

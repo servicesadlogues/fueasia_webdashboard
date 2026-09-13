@@ -53,3 +53,13 @@ export const listMemberEvents = () =>
 
 export const getMemberEvent = (id) =>
   http.get(`/members/me/events/${id}`, { skipErrorToast: true });
+
+export const uploadSpeakerDocuments = (formData, token) =>
+  http.post('/speakers/upload-documents', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'x-session-token': token,
+    },
+  });
+
+export const submitSpeakerRegistration = (data) => http.post('/speakers/submit', data);
