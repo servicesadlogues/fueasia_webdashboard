@@ -2,13 +2,20 @@ import { useFieldArray } from 'react-hook-form'
 
 const MAX_TOPICS = 4
 
-const TopicsSection = ({ register, control }) => {
+const fieldError = (errors, index, name) =>
+  errors?.topics?.[index]?.[name]?.message || errors?.topics?.[index]?.message
+
+const TopicsSection = ({ register, control, errors }) => {
   const { fields, append, remove } = useFieldArray({ control, name: 'topics' })
 
   return (
     <div className="section-card">
       <div className="section-header">4. Suggested Topics of Interest (up to 4)</div>
       <div className="section-body">
+        {errors.topics?.message && (
+          <p className="error-text mb-4">{errors.topics.message}</p>
+        )}
+
         {fields.map((field, index) => (
           <div key={field.id} className="mb-8 pb-8 border-b border-gray-200 last:mb-0 last:pb-0 last:border-b-0">
             <div className="flex items-center justify-between gap-3 mb-4">
@@ -25,21 +32,27 @@ const TopicsSection = ({ register, control }) => {
             </div>
 
             <div className="mb-5">
-              <label className="label">Suggested Topic of Interest {index + 1}</label>
+              <label className="label">Suggested Topic of Interest {index + 1} <span className="text-red-500">*</span></label>
               <input {...register(`topics.${index}.topic`)} className="input-field" />
+              {fieldError(errors, index, 'topic') && (
+                <p className="error-text">{fieldError(errors, index, 'topic')}</p>
+              )}
             </div>
 
             <div className="mb-5">
-              <label className="label">Abstract/Summary (200-300 words with references)</label>
+              <label className="label">Abstract/Summary (200-300 words with references) <span className="text-red-500">*</span></label>
               <textarea
                 {...register(`topics.${index}.abstract`)}
                 rows={5}
                 className="input-field resize-y min-h-[120px]"
               />
+              {fieldError(errors, index, 'abstract') && (
+                <p className="error-text">{fieldError(errors, index, 'abstract')}</p>
+              )}
             </div>
 
             <div>
-              <label className="label">Preferred Session Format</label>
+              <label className="label">Preferred Session Format <span className="text-red-500">*</span></label>
               <div className="flex flex-wrap gap-6 mt-1">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -58,6 +71,9 @@ const TopicsSection = ({ register, control }) => {
                   <span className="text-sm">Workshop</span>
                 </label>
               </div>
+              {fieldError(errors, index, 'sessionLecture') && (
+                <p className="error-text">{fieldError(errors, index, 'sessionLecture')}</p>
+              )}
             </div>
           </div>
         ))}

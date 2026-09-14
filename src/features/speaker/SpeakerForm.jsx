@@ -5,6 +5,7 @@ import { notify } from '../../utils/notify'
 import { speakerSubmissionSchema } from '../../utils/validators'
 import { submitSpeakerRegistration } from '../../services/api'
 import { FormProvider, useFormContext } from './FormContext'
+import { SPEAKER_EVENT_NAME } from './constants'
 import PersonalInfo from './sections/PersonalInfo'
 import DocumentUpload from './sections/DocumentUpload'
 import ShortBio from './sections/ShortBio'
@@ -46,9 +47,10 @@ const SuccessCard = ({ data, onSubmitAnother }) => (
 )
 
 const SpeakerFormInner = () => {
-  const { sessionToken, onResetForm } = useFormContext()
+  const { sessionToken, onResetForm, allRequiredDocsUploaded } = useFormContext()
   const [flowStatus, setFlowStatus] = useState(null)
   const [flowData, setFlowData] = useState(null)
+  const [docError, setDocError] = useState('')
 
   const {
     register,
@@ -71,6 +73,13 @@ const SpeakerFormInner = () => {
   })
 
   const onSubmit = async (data) => {
+    if (!allRequiredDocsUploaded) {
+      setDocError('Please upload and save both Passport and CV before submitting.')
+      notify.error('Upload Passport and CV before submitting.')
+      return
+    }
+
+    setDocError('')
     setFlowStatus('loading')
     try {
       const res = await submitSpeakerRegistration({
@@ -93,7 +102,7 @@ const SpeakerFormInner = () => {
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="mb-8 text-center">
           <h2 className="text-navy font-bold text-3xl mb-1">Speaker Submission Portal</h2>
-          <p className="text-navy font-semibold text-xl mb-2">Hair &amp; Beyond Summit 2026</p>
+          <p className="text-navy font-semibold text-xl mb-2">{SPEAKER_EVENT_NAME}</p>
           <p className="text-gray-500 text-base max-w-2xl mx-auto">
             Welcome to the official speaker submission page. Please complete the form and upload all required documents to finalize your participation.
           </p>
@@ -103,9 +112,9 @@ const SpeakerFormInner = () => {
         </div>
 
         <PersonalInfo register={register} control={control} errors={errors} />
-        <DocumentUpload />
-        <ShortBio register={register} />
-        <TopicsSection register={register} control={control} />
+        <DocumentUpload docError={docError} />
+        <ShortBio register={register} errors={errors} />
+        <TopicsSection register={register} control={control} errors={errors} />
         <Agreements register={register} errors={errors} />
 
         <div className="mt-2">

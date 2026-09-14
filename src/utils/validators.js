@@ -109,31 +109,55 @@ export const profileSchema = yup.object({
 const requiredCheckbox = (message) =>
   yup.boolean().oneOf([true], message).required(message);
 
+const countWords = (value) => String(value || '').trim().split(/\s+/).filter(Boolean).length;
+
+const requiredString = (label, max = 200) =>
+  yup.string().transform(trim).max(max, `${label} is too long`).required(`${label} is required`);
+
+const optionalSocial = (max = 300) =>
+  yup.string().transform(trim).max(max).optional().nullable();
+
+const topicItemSchema = yup.object({
+  topic: requiredString('Topic', 300),
+  abstract: requiredString('Abstract', 5000).test(
+    'abstract-words',
+    'Each abstract must be 300 words or fewer',
+    (value) => countWords(value) <= 300,
+  ),
+  sessionLecture: yup.boolean(),
+  sessionWorkshop: yup.boolean(),
+}).test('session-format', 'Select Lecture or Workshop for each topic', (value) =>
+  Boolean(value?.sessionLecture || value?.sessionWorkshop));
+
 export const speakerSubmissionSchema = yup.object({
-  fullName: yup.string().transform(trim).min(2, 'Full name is required').max(200, 'Full name is too long').required('Full name is required'),
+  fullName: requiredString('Full name', 200).min(2, 'Full name is required'),
+  preferredName: requiredString('Preferred name', 200),
+  title: requiredString('Title', 50),
+  designation: requiredString('Official designation', 200),
+  organization: requiredString('Organization/institution', 200),
+  nationality: requiredString('Nationality', 100),
+  uaeResident: yup
+    .string()
+    .oneOf(['yes', 'no'], 'Foreign resident is required')
+    .required('Foreign resident is required'),
   contactEmail: yup.string().transform(trim).email('Invalid email').max(150, 'Email is too long').required('Contact email is required'),
-  preferredName: yup.string().transform(trim).max(200).optional(),
-  title: yup.string().max(50).optional(),
-  designation: yup.string().max(200).optional(),
-  organization: yup.string().max(200).optional(),
-  nationality: yup.string().max(100).optional(),
-  uaeResident: yup.string().max(10).optional(),
-  contactPhone: yup.string().max(30).optional(),
-  instagram: yup.string().max(300).optional(),
-  facebook: yup.string().max(300).optional(),
-  linkedin: yup.string().max(300).optional(),
-  youtube: yup.string().max(300).optional(),
-  twitter: yup.string().max(300).optional(),
-  shortBio: yup.string().max(10000).optional(),
-  topics: yup.array().of(
-    yup.object({
-      topic: yup.string().max(300).optional(),
-      abstract: yup.string().max(5000).optional(),
-      sessionLecture: yup.boolean().optional(),
-      sessionWorkshop: yup.boolean().optional(),
-    })
-  ).max(4).optional(),
-  agreementScientific: requiredCheckbox('You must confirm your presentation is scientific/non-commercial'),
+  contactPhone: requiredString('Contact phone', 30),
+  instagram: optionalSocial(),
+  facebook: optionalSocial(),
+  linkedin: optionalSocial(),
+  youtube: optionalSocial(),
+  twitter: optionalSocial(),
+  shortBio: yup
+    .string()
+    .transform(trim)
+    .required('Short bio is required')
+    .test('bio-words', 'Short bio must be 200 words or fewer', (value) => countWords(value) <= 200),
+  topics: yup
+    .array()
+    .of(topicItemSchema)
+    .min(1, 'At least one topic is required')
+    .max(4),
+  agreementScientific: requiredCheckbox('You must confirm your presentation complies with Indian Medical Council rules'),
   agreementPhotoBio: requiredCheckbox('You must consent to photo and bio usage'),
   agreementPresentation: requiredCheckbox('You must agree to provide your final presentation by the deadline'),
   agreementDataStorage: requiredCheckbox('You must consent to data storage and processing'),

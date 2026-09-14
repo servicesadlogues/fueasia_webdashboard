@@ -1,7 +1,9 @@
+import { AGREEMENT_SCIENTIFIC_TEXT } from '../constants'
+
 const AGREEMENTS = [
   {
     key: 'agreementScientific',
-    label: 'I confirm that my presentation is scientific/non-commercial and complies with DOH/DHA rules.',
+    label: AGREEMENT_SCIENTIFIC_TEXT,
   },
   {
     key: 'agreementPhotoBio',

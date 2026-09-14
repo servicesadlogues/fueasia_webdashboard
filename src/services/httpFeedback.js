@@ -14,6 +14,9 @@ export const apiErrorMessage = (err) => {
   return 'Something went wrong. Please try again.'
 }
 
+/** Use on axios config when the UI already shows its own loading state. */
+export const localLoader = { skipLoader: true }
+
 const skipLoaderStart = (config) =>
   Boolean(config?.silent || config?.skipLoader || config?._retry || SKIP_LOADER_URL.test(config?.url || ''))
 

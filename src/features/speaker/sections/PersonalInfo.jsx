@@ -1,7 +1,11 @@
 import { Controller } from 'react-hook-form'
 import { CountrySelect } from '../../../components/ui'
 
-const TITLE_OPTIONS = ['', 'Dr.', 'Prof.', 'Mr.', 'Mrs.', 'Ms.']
+const TITLE_OPTIONS = ['Dr.', 'Prof.', 'Mr.', 'Mrs.', 'Ms.']
+
+const FieldError = ({ error }) => (error ? <p className="error-text">{error.message}</p> : null)
+
+const RequiredMark = () => <span className="text-red-500">*</span>
 
 const PersonalInfo = ({ register, control, errors }) => (
   <div className="section-card">
@@ -9,38 +13,43 @@ const PersonalInfo = ({ register, control, errors }) => (
     <div className="section-body">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
         <div>
-          <label className="label">Full Name (as per passport for permits) <span className="text-red-500">*</span></label>
+          <label className="label">Full Name (as per passport for permits) <RequiredMark /></label>
           <input {...register('fullName')} className="input-field" />
-          {errors.fullName && <p className="error-text">{errors.fullName.message}</p>}
+          <FieldError error={errors.fullName} />
         </div>
         <div>
-          <label className="label">Preferred Name (for agenda &amp; badge)</label>
+          <label className="label">Preferred Name (for agenda &amp; badge) <RequiredMark /></label>
           <input {...register('preferredName')} className="input-field" />
+          <FieldError error={errors.preferredName} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
         <div>
-          <label className="label">Title</label>
+          <label className="label">Title <RequiredMark /></label>
           <select {...register('title')} className="input-field">
+            <option value="" />
             {TITLE_OPTIONS.map((option) => (
-              <option key={option || 'blank'} value={option}>{option}</option>
+              <option key={option} value={option}>{option}</option>
             ))}
           </select>
+          <FieldError error={errors.title} />
         </div>
         <div>
-          <label className="label">Official designation</label>
+          <label className="label">Official designation <RequiredMark /></label>
           <input {...register('designation')} className="input-field" />
+          <FieldError error={errors.designation} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
         <div>
-          <label className="label">Organization/institution</label>
+          <label className="label">Organization/institution <RequiredMark /></label>
           <input {...register('organization')} className="input-field" />
+          <FieldError error={errors.organization} />
         </div>
         <div>
-          <label className="label">Nationality</label>
+          <label className="label">Nationality <RequiredMark /></label>
           <Controller
             name="nationality"
             control={control}
@@ -48,28 +57,31 @@ const PersonalInfo = ({ register, control, errors }) => (
               <CountrySelect value={value} onChange={onChange} placeholder="" />
             )}
           />
+          <FieldError error={errors.nationality} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
         <div>
-          <label className="label">UAE Resident?</label>
+          <label className="label">Foreign Resident? <RequiredMark /></label>
           <select {...register('uaeResident')} className="input-field">
             <option value="" />
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
+          <FieldError error={errors.uaeResident} />
         </div>
         <div>
-          <label className="label">Contact Email <span className="text-red-500">*</span></label>
+          <label className="label">Contact Email <RequiredMark /></label>
           <input {...register('contactEmail')} type="email" className="input-field" />
-          {errors.contactEmail && <p className="error-text">{errors.contactEmail.message}</p>}
+          <FieldError error={errors.contactEmail} />
         </div>
       </div>
 
       <div className="mb-5">
-        <label className="label">Contact Phone (UAE format: 9715xxxxxxxx)</label>
+        <label className="label">Contact Phone <RequiredMark /></label>
         <input {...register('contactPhone')} className="input-field" />
+        <FieldError error={errors.contactPhone} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

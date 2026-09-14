@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getAdminSpeaker, getAdminSpeakerDocuments } from '../../../services/adminApi'
 import { formatDate } from '../../../utils/formatDate'
-import PageHeader from '../../../components/ui/PageHeader'
+import { DocumentPreviewModal, PageHeader } from '../../../components/ui'
 import InfoGrid from '../../dashboard/components/InfoGrid'
 import { displayValue } from '../../dashboard/utils/labels'
 
@@ -13,6 +13,7 @@ const SpeakerDetailPage = () => {
   const [speaker, setSpeaker] = useState(null)
   const [documents, setDocuments] = useState([])
   const [loading, setLoading] = useState(true)
+  const [preview, setPreview] = useState({ open: false, title: '', url: '', mimeType: '' })
 
   useEffect(() => {
     let active = true
@@ -42,6 +43,16 @@ const SpeakerDetailPage = () => {
 
   const displayName = speaker.fullName || speaker.preferredName || `Speaker #${speaker.id}`
 
+  const openDocumentPreview = (item) => {
+    const isPdf = /\.pdf$/i.test(item.fileName || '')
+    setPreview({
+      open: true,
+      title: item.label,
+      url: item.url,
+      mimeType: isPdf ? 'application/pdf' : 'image/jpeg',
+    })
+  }
+
   return (
     <div>
       <PageHeader
@@ -61,7 +72,7 @@ const SpeakerDetailPage = () => {
               { label: 'Designation', value: displayValue(speaker.designation) },
               { label: 'Organization', value: displayValue(speaker.organization) },
               { label: 'Nationality', value: displayValue(speaker.nationality) },
-              { label: 'UAE resident', value: displayValue(speaker.uaeResident) },
+              { label: 'Foreign resident', value: displayValue(speaker.uaeResident) },
               { label: 'Contact email', value: displayValue(speaker.contactEmail) },
               { label: 'Contact phone', value: displayValue(speaker.contactPhone) },
               { label: 'Instagram', value: displayValue(speaker.instagram) },
@@ -133,13 +144,30 @@ const SpeakerDetailPage = () => {
                     <p className="ds-label">{item.label}</p>
                     <p className="ds-caption">{item.fileName}</p>
                   </div>
-                  <a className="btn-outline !py-2" href={item.url} target="_blank" rel="noreferrer">Open</a>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      className="btn-outline !py-2"
+                      onClick={() => openDocumentPreview(item)}
+                    >
+                      Preview
+                    </button>
+                    <a className="btn-outline !py-2" href={item.url} target="_blank" rel="noreferrer">Open</a>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      <DocumentPreviewModal
+        open={preview.open}
+        title={preview.title}
+        url={preview.url}
+        mimeType={preview.mimeType}
+        onClose={() => setPreview({ open: false, title: '', url: '', mimeType: '' })}
+      />
     </div>
   )
 }
