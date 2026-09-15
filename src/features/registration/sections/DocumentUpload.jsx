@@ -64,15 +64,14 @@ const DocumentUpload = () => {
         {DOC_FIELDS.map(({ key, label }) => (
           <div key={key} className="mb-4">
             <label className="label">{label}</label>
-            <div className="flex items-stretch border border-gray-200 rounded overflow-hidden">
+            <div className="ds-file-picker-row">
               <button
                 type="button"
                 onClick={() => refs[key].current.click()}
-                className="bg-white border-r border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors whitespace-nowrap"
               >
                 Choose File
               </button>
-              <span className="flex-1 px-3 py-2.5 text-sm text-gray-500 bg-gray-50 flex items-center truncate">
+              <span>
                 {files[key] ? files[key].name : 'No File Chosen'}
               </span>
               <input
@@ -86,12 +85,12 @@ const DocumentUpload = () => {
           </div>
         ))}
 
-        <div className="flex items-center gap-4 mt-2">
+        <div className="flex flex-wrap items-center gap-4 mt-2">
           <button
             type="button"
             onClick={handleUpload}
             disabled={uploading}
-            className="btn-primary"
+            className="btn-primary w-full sm:w-auto"
           >
             {uploading ? 'Uploading...' : 'Upload'}
           </button>

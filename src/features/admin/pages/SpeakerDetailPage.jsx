@@ -2,11 +2,19 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getAdminSpeaker, getAdminSpeakerDocuments } from '../../../services/adminApi'
 import { formatDate } from '../../../utils/formatDate'
+import { resolvePreviewMimeType } from '../../../utils/fileUpload'
 import { DocumentPreviewModal, PageHeader } from '../../../components/ui'
 import InfoGrid from '../../dashboard/components/InfoGrid'
 import { displayValue } from '../../dashboard/utils/labels'
 
 const boolLabel = (value) => (value ? 'Yes' : 'No')
+
+const SPEAKER_DOC_ORDER = ['photo', 'passport', 'cv']
+
+const sortSpeakerDocuments = (items = []) =>
+  [...items].sort(
+    (a, b) => SPEAKER_DOC_ORDER.indexOf(a.key) - SPEAKER_DOC_ORDER.indexOf(b.key),
+  )
 
 const SpeakerDetailPage = () => {
   const { id } = useParams()
@@ -26,7 +34,7 @@ const SpeakerDetailPage = () => {
       .then(([speakerRes, docsRes]) => {
         if (!active) return
         setSpeaker(speakerRes.speaker)
-        setDocuments(docsRes.documents?.items || [])
+        setDocuments(sortSpeakerDocuments(docsRes.documents?.items || []))
       })
       .catch(() => {})
       .finally(() => {
@@ -44,12 +52,11 @@ const SpeakerDetailPage = () => {
   const displayName = speaker.fullName || speaker.preferredName || `Speaker #${speaker.id}`
 
   const openDocumentPreview = (item) => {
-    const isPdf = /\.pdf$/i.test(item.fileName || '')
     setPreview({
       open: true,
       title: item.label,
       url: item.url,
-      mimeType: isPdf ? 'application/pdf' : 'image/jpeg',
+      mimeType: resolvePreviewMimeType(item.mimeType, item.fileName),
     })
   }
 

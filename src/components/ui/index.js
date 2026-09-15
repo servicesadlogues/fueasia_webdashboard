@@ -1,5 +1,6 @@
 export { default as Button } from './Button'
 export { default as ConfirmDialog } from './ConfirmDialog'
+export { default as DocumentPreviewBox } from './DocumentPreviewBox'
 export { default as DocumentPreviewModal } from './DocumentPreviewModal'
 export { default as CountrySelect } from './CountrySelect'
 export { default as EmptyState } from './EmptyState'

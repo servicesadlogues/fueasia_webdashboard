@@ -1,25 +1,34 @@
-const DocumentPreviewModal = ({ open, title, url, mimeType, onClose }) => {
+const DocumentPreviewModal = ({ open, title, url, mimeType, size = 'default', onClose }) => {
   if (!open || !url) return null
 
   const isPdf = mimeType === 'application/pdf' || /\.pdf$/i.test(title || '')
+  const isLarge = size === 'large'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60" onClick={onClose}>
+    <div className="ds-doc-preview-overlay" onClick={onClose}>
       <div
-        className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
+        className={`ds-doc-preview-modal${isLarge ? ' ds-doc-preview-modal--large' : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-gray-200">
-          <p className="font-semibold text-navy truncate">{title || 'Preview'}</p>
+        <div className="ds-doc-preview-modal-header">
+          <p className="ds-doc-preview-modal-title">{title || 'Preview'}</p>
           <button type="button" className="btn-ghost !py-1.5 !px-3" onClick={onClose}>
             Close
           </button>
         </div>
-        <div className="flex-1 overflow-auto p-4 bg-gray-50">
+        <div className="ds-doc-preview-modal-body">
           {isPdf ? (
-            <iframe title={title} src={url} className="w-full min-h-[70vh] rounded border border-gray-200 bg-white" />
+            <iframe
+              title={title}
+              src={url}
+              className={`ds-doc-preview-frame${isLarge ? ' ds-doc-preview-frame--large' : ''}`}
+            />
           ) : (
-            <img src={url} alt={title} className="max-w-full mx-auto rounded border border-gray-200 bg-white" />
+            <img
+              src={url}
+              alt={title}
+              className={`ds-doc-preview-image${isLarge ? ' ds-doc-preview-image--large' : ''}`}
+            />
           )}
         </div>
       </div>

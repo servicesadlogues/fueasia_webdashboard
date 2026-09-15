@@ -26,18 +26,18 @@ const Speciality = ({ register, control, errors }) => {
         <div className="mb-5">
           <div className="flex flex-col gap-3">
             {SPECIALITIES.map(({ value, label }) => (
-              <label key={value} className="flex items-center gap-3 cursor-pointer">
+              <label key={value} className="flex flex-wrap items-center gap-3 cursor-pointer">
                 <input
                   type="radio"
                   value={value}
                   {...register('speciality')}
-                  className="accent-primary w-4 h-4"
+                  className="accent-primary w-4 h-4 shrink-0"
                 />
                 <span className="text-sm">{label}</span>
                 {value === 'other' && speciality === 'other' && (
                   <input
                     {...register('specialityOther')}
-                    className="input-field max-w-xs ml-2"
+                    className="input-field w-full sm:max-w-xs"
                     placeholder="Specify speciality"
                   />
                 )}

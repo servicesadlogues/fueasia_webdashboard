@@ -18,8 +18,8 @@ const TopicsSection = ({ register, control, errors }) => {
 
         {fields.map((field, index) => (
           <div key={field.id} className="mb-8 pb-8 border-b border-gray-200 last:mb-0 last:pb-0 last:border-b-0">
-            <div className="flex items-center justify-between gap-3 mb-4">
-              <p className="font-semibold text-navy">Suggested Topic of Interest {index + 1}</p>
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <p className="font-semibold text-navy text-sm sm:text-base">Suggested Topic of Interest {index + 1}</p>
               {fields.length > 1 && (
                 <button
                   type="button"

@@ -5,7 +5,6 @@ import { notify } from '../../utils/notify'
 import { speakerSubmissionSchema } from '../../utils/validators'
 import { submitSpeakerRegistration } from '../../services/api'
 import { FormProvider, useFormContext } from './FormContext'
-import { SPEAKER_EVENT_NAME } from './constants'
 import PersonalInfo from './sections/PersonalInfo'
 import DocumentUpload from './sections/DocumentUpload'
 import ShortBio from './sections/ShortBio'
@@ -74,8 +73,8 @@ const SpeakerFormInner = () => {
 
   const onSubmit = async (data) => {
     if (!allRequiredDocsUploaded) {
-      setDocError('Please upload and save both Passport and CV before submitting.')
-      notify.error('Upload Passport and CV before submitting.')
+      setDocError('Please upload recent photograph, passport, and CV before submitting.')
+      notify.error('Upload recent photograph, passport, and CV before submitting.')
       return
     }
 
@@ -99,11 +98,9 @@ const SpeakerFormInner = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div className="max-w-5xl mx-auto px-4 py-8">
-        <div className="mb-8 text-center">
-          <h2 className="text-navy font-bold text-3xl mb-1">Speaker Submission Portal</h2>
-          <p className="text-navy font-semibold text-xl mb-2">{SPEAKER_EVENT_NAME}</p>
-          <p className="text-gray-500 text-base max-w-2xl mx-auto">
+      <div className="max-w-5xl mx-auto px-3 sm:px-4 ds-public-form-shell">
+        <div className="mb-6 sm:mb-8 text-center">
+          <p className="text-gray-500 text-sm sm:text-base max-w-2xl mx-auto">
             Welcome to the official speaker submission page. Please complete the form and upload all required documents to finalize your participation.
           </p>
           <p className="text-gray-500 text-sm mt-3">

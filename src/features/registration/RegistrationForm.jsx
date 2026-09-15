@@ -225,10 +225,10 @@ const RegistrationFormInner = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-3 sm:px-4 ds-public-form-shell">
 
-        <div className="mb-8">
-          <h2 className="text-navy font-bold text-2xl mb-1">
+        <div className="mb-6 sm:mb-8">
+          <h2 className="ds-heading ds-public-form-title sm:text-2xl mb-1">
             FUE Global Membership Registration
           </h2>
           <p className="text-gray-500 text-sm">
@@ -246,7 +246,7 @@ const RegistrationFormInner = () => {
           <button
             type="submit"
             disabled={isSubmitting || paymentOpened}
-            className="btn-primary text-base px-8 py-3"
+            className="btn-primary w-full sm:w-auto text-base px-8 py-3"
           >
             {isSubmitting ? 'Processing...' : paymentOpened ? 'Opening Payment...' : 'Confirm Payment'}
           </button>

@@ -85,7 +85,7 @@ const PaymentSection = ({ register, errors }) => {
       <div className="section-header">Payment Details</div>
       <div className="section-body">
 
-        <div className="bg-primary-light border border-primary-border rounded-lg p-6 mb-6">
+        <div className="bg-primary-light border border-primary-border rounded-lg p-4 sm:p-6 mb-6">
 
           {/* Coupon input row */}
           <div className="mb-3">
@@ -103,11 +103,11 @@ const PaymentSection = ({ register, errors }) => {
                 {couponError && <p className="error-text">{couponError}</p>}
               </div>
               {!appliedCoupon ? (
-                <button type="button" onClick={handleApplyCoupon} disabled={applyingCoupon} className="btn-primary h-[42px]">
+                <button type="button" onClick={handleApplyCoupon} disabled={applyingCoupon} className="btn-primary h-[42px] w-full sm:w-auto">
                   {applyingCoupon ? 'Applying...' : 'Apply'}
                 </button>
               ) : (
-                <button type="button" onClick={handleRemoveCoupon} className="h-[42px] px-5 text-sm border border-red-300 text-red-500 rounded hover:bg-red-50 transition-colors">
+                <button type="button" onClick={handleRemoveCoupon} className="h-[42px] w-full sm:w-auto px-5 text-sm border border-red-300 text-red-500 rounded hover:bg-red-50 transition-colors">
                   Remove
                 </button>
               )}
@@ -115,11 +115,11 @@ const PaymentSection = ({ register, errors }) => {
           </div>
 
           {/* Promo offer row */}
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
             <span className="text-sm text-gray-700">
               Avail this offer for <strong className="text-primary">10% OFF</strong>
             </span>
-            <button type="button" onClick={handleCopyPromoCoupon} className="btn-primary text-sm px-4 py-1.5">
+            <button type="button" onClick={handleCopyPromoCoupon} className="btn-primary text-sm px-4 py-1.5 w-full sm:w-auto">
               Copy Coupon
             </button>
           </div>
@@ -177,7 +177,7 @@ const PaymentSection = ({ register, errors }) => {
 
         {/* Captcha */}
         <div className="mb-6">
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex flex-wrap items-center gap-3 mb-2">
             {captchaSvg ? (
               <img
                 alt="Captcha"
@@ -196,12 +196,12 @@ const PaymentSection = ({ register, errors }) => {
               &#x21bb;
             </button>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <input
               type="text"
               value={captchaInput}
               onChange={(e) => setCaptchaInput(e.target.value.toUpperCase())}
-              className="input-field max-w-[160px]"
+              className="input-field w-full sm:max-w-[160px]"
               placeholder="Enter captcha"
               disabled={captchaVerified}
             />
