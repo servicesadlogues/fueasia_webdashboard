@@ -1,11 +1,8 @@
-import { AdloguesCreditLink, copyrightNotice } from './BrandCredit'
+import { BrandFooterStack } from './BrandCredit'
 
 const Footer = () => (
   <footer className="ds-app-footer">
-    <p className="ds-app-footer-row">
-      <span>{copyrightNotice()}</span>
-      <AdloguesCreditLink />
-    </p>
+    <BrandFooterStack />
   </footer>
 )
 

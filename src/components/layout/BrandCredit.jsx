@@ -17,3 +17,10 @@ export const AdloguesCreditLink = ({ className = 'ds-footer-credit' }) => (
     {ADLOGUES_CREDIT_LABEL}
   </a>
 )
+
+export const BrandFooterStack = () => (
+  <div className="ds-brand-footer-stack">
+    <AdloguesCreditLink />
+    <span>{copyrightNotice()}</span>
+  </div>
+)

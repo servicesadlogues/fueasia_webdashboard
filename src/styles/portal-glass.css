@@ -27,6 +27,9 @@ body:has(.ds-dash) {
   --portal-gradient-accent: radial-gradient(ellipse 80% 50% at 20% -10%, rgba(240, 120, 0, 0.15), transparent 55%),
     radial-gradient(ellipse 60% 40% at 90% 10%, rgba(59, 130, 246, 0.12), transparent 50%),
     radial-gradient(ellipse 50% 30% at 50% 100%, rgba(26, 26, 46, 0.06), transparent 60%);
+  --dash-footer-pad-y: 0.85rem;
+  --dash-footer-margin-bottom: 0.75rem;
+  --dash-footer-line: 1.125rem;
   min-height: 0;
   height: 100dvh;
   max-height: 100dvh;
@@ -160,13 +163,18 @@ body:has(.ds-dash) {
 }
 
 .ds-dash-sidebar-foot {
-  padding: 1rem 1.25rem;
+  padding: var(--dash-footer-pad-y) 1.25rem;
+  margin-bottom: var(--dash-footer-margin-bottom);
+  min-height: calc(var(--dash-footer-pad-y) * 2 + var(--dash-footer-line) + 2px);
+  display: flex;
+  align-items: center;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.45);
   font-size: 0.7rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .ds-dash-frame {
@@ -196,6 +204,9 @@ body:has(.ds-dash) {
 }
 
 @media (min-width: 768px) {
+  .ds-dash {
+    --dash-footer-margin-bottom: 1rem;
+  }
   .ds-dash-topbar {
     margin: 1rem 1.25rem 0;
     padding: 0.9rem 1.35rem;
@@ -219,8 +230,10 @@ body:has(.ds-dash) {
 }
 
 .ds-dash-footer {
-  margin: 0 0.75rem 0.75rem;
-  padding: 0.85rem 1.15rem;
+  margin: 0 0.75rem var(--dash-footer-margin-bottom);
+  padding: var(--dash-footer-pad-y) 1.15rem;
+  min-height: calc(var(--dash-footer-pad-y) * 2 + var(--dash-footer-line) + 2px);
+  box-sizing: border-box;
   flex-shrink: 0;
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
@@ -238,7 +251,8 @@ body:has(.ds-dash) {
 
 @media (min-width: 768px) {
   .ds-dash-footer {
-    margin: 0 1.25rem 1rem;
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
   }
 }
 

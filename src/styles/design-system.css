@@ -239,14 +239,14 @@
     padding: var(--space-4);
     margin-top: 2.5rem;
   }
-  .ds-app-footer-row {
+  .ds-brand-footer-stack {
     margin: 0;
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3.5rem;
-    white-space: nowrap;
+    text-align: center;
+    gap: 0.35rem;
   }
   .ds-footer-credit {
     color: inherit;
