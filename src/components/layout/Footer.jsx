@@ -1,6 +1,11 @@
+import { AdloguesCreditLink, copyrightNotice } from './BrandCredit'
+
 const Footer = () => (
   <footer className="ds-app-footer">
-    <p>&copy; {new Date().getFullYear()} FUE Global. All rights reserved.</p>
+    <p className="ds-app-footer-row">
+      <span>{copyrightNotice()}</span>
+      <AdloguesCreditLink />
+    </p>
   </footer>
 )
 

@@ -14,13 +14,13 @@ const adminHttp = createHttpClient({
 })
 
 export const loginAdmin = (email, password) =>
-  adminHttp.post('/admin/auth/login', { email, password }, { skipErrorToast: true, skipLoader: true })
+  adminHttp.post('/admin/auth/login', { email, password }, { skipErrorToast: true })
 
 export const forgotAdminPassword = (email) =>
-  adminHttp.post('/admin/auth/forgot-password', { email }, { skipErrorToast: true, skipLoader: true })
+  adminHttp.post('/admin/auth/forgot-password', { email }, { skipErrorToast: true })
 
 export const resetAdminPassword = (token, password, confirmPassword) =>
-  adminHttp.post('/admin/auth/reset-password', { token, password, confirmPassword }, { skipErrorToast: true, skipLoader: true })
+  adminHttp.post('/admin/auth/reset-password', { token, password, confirmPassword }, { skipErrorToast: true })
 
 export const getAdminMe = () => adminHttp.get('/admin/auth/me', { silent: true, skipErrorToast: true })
 

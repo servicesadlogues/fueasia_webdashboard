@@ -585,7 +585,7 @@ const ProfilePage = () => {
         </fieldset>
 
         {editing ? (
-          <div className="sticky bottom-0 z-10 bg-white border-t border-[var(--color-border)] py-4 px-6 -mx-4 sm:-mx-6 lg:-mx-8 flex items-center justify-between shadow-lg mt-6">
+          <div className="ds-profile-savebar">
             <div className="flex items-center gap-3">
               {hasChanges && (
                 <span className="text-xs text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200 font-medium">

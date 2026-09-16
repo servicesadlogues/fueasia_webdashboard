@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { notify } from '../../../utils/notify'
-import PageHeader from '../../../components/ui/PageHeader'
+import { EmptyState, PageHeader } from '../../../components/ui'
 import { createAdminCoupon, listAdminCoupons, updateAdminCoupon } from '../../../services/adminApi'
 import { validateCouponForm } from '../../../utils/adminFormValidation'
 
@@ -86,6 +86,9 @@ const CouponsPage = () => {
 
       <div className="section-card">
         <div className="section-header">All coupons</div>
+        {!rows.length ? (
+          <EmptyState title="No coupons yet" message="Create a coupon to offer discounts on public registration." />
+        ) : (
         <div className="ds-table-wrap">
           <table className="ds-table">
             <thead>
@@ -120,6 +123,7 @@ const CouponsPage = () => {
             </tbody>
           </table>
         </div>
+        )}
       </div>
     </div>
   )

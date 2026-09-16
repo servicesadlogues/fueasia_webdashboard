@@ -8,10 +8,10 @@ import {
   updateAdminMemberStatus,
 } from '../../../services/adminApi'
 import { formatDate } from '../../../utils/formatDate'
-import PageHeader from '../../../components/ui/PageHeader'
-import { displayValue, formatMoney, membershipTypeLabel, specialityLabel } from '../../dashboard/utils/labels'
-import InfoGrid from '../../dashboard/components/InfoGrid'
-import { MembershipStatusBadge, PaymentStatusBadge } from '../../dashboard/components/StatusBadge'
+import { EmptyState, PageHeader } from '../../../components/ui'
+import { displayValue, formatMoney, membershipTypeLabel, specialityLabel } from '../../../utils/labels'
+import InfoGrid from '../../../components/ui/InfoGrid'
+import { MembershipStatusBadge, PaymentStatusBadge } from '../../../components/ui/StatusBadge'
 
 const MemberDetailPage = () => {
   const { membershipId } = useParams()
@@ -66,9 +66,22 @@ const MemberDetailPage = () => {
     }
   }
 
-  if (loading) return null
+  if (loading) {
+    return (
+      <EmptyState
+        title="Loading member"
+        message="Fetching profile and documents…"
+      />
+    )
+  }
   if (!member) {
-    return <p className="ds-muted">Member not found. <Link to="/admin/home/members" className="ds-link">Back</Link></p>
+    return (
+      <EmptyState
+        title="Member not found"
+        message="This membership ID is not available."
+        action={<Link to="/admin/home/members" className="btn-primary">Back to members</Link>}
+      />
+    )
   }
 
   return (
@@ -125,7 +138,7 @@ const MemberDetailPage = () => {
       <div className="section-card">
         <div className="section-header">Documents</div>
         {documents.length === 0 ? (
-          <div className="ds-empty">No documents on file.</div>
+          <EmptyState title="No documents on file" message="This member has not uploaded any documents." />
         ) : (
           <div className="section-body flex flex-col gap-3">
             {documents.map((item) => (

@@ -1,10 +1,9 @@
 import { formatDate } from '../../../utils/formatDate'
 import PageHeader from '../../../components/ui/PageHeader'
 import { useDashboard } from '../dashboardContext'
-import { displayValue, formatMoney, membershipTypeLabel } from '../utils/labels'
-import InfoGrid from '../components/InfoGrid'
+import { displayValue, formatMoney, membershipTypeLabel } from '../../../utils/labels'
+import { InfoGrid, MembershipStatusBadge } from '../../../components/ui'
 import MembershipCard from '../components/MembershipCard'
-import { MembershipStatusBadge } from '../components/StatusBadge'
 
 const MembershipPage = () => {
   const { profile } = useDashboard()
@@ -20,7 +19,7 @@ const MembershipPage = () => {
       />
 
       {(expired || expiring) && (
-        <p className={`mb-6 ${expired ? 'alert-danger' : 'ds-panel'}`}>
+        <p className={`mb-6 ${expired ? 'alert-danger' : 'ds-panel'}`} role="status">
           {expired
             ? 'Your membership has expired. Please contact FUE Global at contact@fueasia.org to renew.'
             : `Your membership expires on ${formatDate(profile.membershipExpiryDate)}. A renewal reminder is sent 30 days before expiry.`}

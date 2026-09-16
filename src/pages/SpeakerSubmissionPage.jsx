@@ -11,9 +11,9 @@ import { SPEAKER_BANNER_URL } from '../constants/brand'
 const SpeakerSubmissionPage = () => (
   <div className="ds-app">
     <Header subtitle="Speaker Submission Portal" />
-    <main className="ds-app-main">
+    <main id="main-content" className="ds-app-main">
       <div className="w-full px-3 sm:px-[2%] pt-4 sm:pt-6 pb-2">
-        <div className="relative w-full overflow-hidden rounded-lg aspect-[1350/700] max-h-[42vh] sm:max-h-none">
+        <div className="relative w-full overflow-hidden rounded-xl aspect-[1350/700] max-h-[42vh] sm:max-h-none shadow-sm">
           <img
             src={SPEAKER_BANNER_URL}
             alt={`${SPEAKER_BANNER_HEADLINE} - ${SPEAKER_BANNER_SUBTITLE}`}

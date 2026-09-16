@@ -1,12 +1,19 @@
 import { Users, Wallet, CalendarDays, BadgePercent } from 'lucide-react'
-import { PageHeader, StatCard } from '../../../components/ui'
-import { formatMoney } from '../../dashboard/utils/labels'
+import { EmptyState, PageHeader, StatCard } from '../../../components/ui'
+import { formatMoney } from '../../../utils/labels'
 import { useAdminStats } from '../hooks/useAdminStats'
 
 const AdminOverviewPage = () => {
   const { stats, loading } = useAdminStats()
 
-  if (loading) return null
+  if (loading) {
+    return (
+      <EmptyState
+        title="Loading overview"
+        message="Fetching membership and revenue stats…"
+      />
+    )
+  }
 
   return (
     <>

@@ -4,8 +4,8 @@ import { getAdminSpeaker, getAdminSpeakerDocuments } from '../../../services/adm
 import { formatDate } from '../../../utils/formatDate'
 import { resolvePreviewMimeType } from '../../../utils/fileUpload'
 import { DocumentPreviewModal, PageHeader } from '../../../components/ui'
-import InfoGrid from '../../dashboard/components/InfoGrid'
-import { displayValue } from '../../dashboard/utils/labels'
+import InfoGrid from '../../../components/ui/InfoGrid'
+import { displayValue } from '../../../utils/labels'
 
 const boolLabel = (value) => (value ? 'Yes' : 'No')
 

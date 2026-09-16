@@ -1,21 +1,5 @@
 import { useEffect, useId, useRef } from 'react'
-
-const DangerIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7" aria-hidden="true">
-    <path d="M3 6h18" />
-    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-    <path d="M10 11v6" />
-    <path d="M14 11v6" />
-    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-  </svg>
-)
-
-const LogoutIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7" aria-hidden="true">
-    <path d="M14 7V5.5A1.5 1.5 0 0 0 12.5 4h-7A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20h7A1.5 1.5 0 0 0 14 18.5V17" />
-    <path d="M10 12h10M16.5 8.5 20 12l-3.5 3.5" />
-  </svg>
-)
+import { LogOut, Trash2 } from 'lucide-react'
 
 const ConfirmDialog = ({
   open,
@@ -75,7 +59,9 @@ const ConfirmDialog = ({
         className="ds-modal-panel"
       >
         <div className={`icon-circle ${iconClass}`}>
-          {isDanger ? <DangerIcon /> : <LogoutIcon />}
+          {isDanger
+            ? <Trash2 className="h-7 w-7" aria-hidden />
+            : <LogOut className="h-7 w-7" aria-hidden />}
         </div>
 
         <h3 id={titleId} className="ds-display text-center">{title}</h3>

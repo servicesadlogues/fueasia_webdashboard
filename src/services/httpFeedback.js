@@ -14,7 +14,7 @@ export const apiErrorMessage = (err) => {
   return 'Something went wrong. Please try again.'
 }
 
-/** Use on axios config when the UI already shows its own loading state. */
+/** Use on axios config when the UI already shows its own full-page or inline upload loader. */
 export const localLoader = { skipLoader: true }
 
 const skipLoaderStart = (config) =>

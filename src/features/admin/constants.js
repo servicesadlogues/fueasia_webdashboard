@@ -1,1 +1,2 @@
 export const MEMBER_PAGE_SIZE = 10
+export const ADMIN_LIST_PAGE_SIZE = MEMBER_PAGE_SIZE

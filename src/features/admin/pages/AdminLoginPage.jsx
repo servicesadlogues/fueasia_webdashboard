@@ -52,7 +52,7 @@ const AdminLoginPage = () => {
       title="Admin Login"
       subtitle="Sign in with your admin email and password."
     >
-      {error && <p className="alert-danger mb-4" role="alert">{error}</p>}
+      {error && <p id="admin-login-error" className="alert-danger mb-4" role="alert">{error}</p>}
       <form onSubmit={handleSubmit} noValidate>
         <label className="label" htmlFor="adminEmail">Email</label>
         <input
@@ -63,6 +63,8 @@ const AdminLoginPage = () => {
           onChange={(e) => { setEmail(e.target.value); setError('') }}
           autoComplete="username"
           autoFocus
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? 'admin-login-error' : undefined}
         />
         <label className="label" htmlFor="adminPassword">Password</label>
         <PasswordField

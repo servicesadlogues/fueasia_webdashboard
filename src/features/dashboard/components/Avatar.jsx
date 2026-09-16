@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { initials } from '../utils/labels'
+import { initials } from '../../../utils/labels'
 
 const Avatar = ({ name, src, className = '' }) => {
   const [failed, setFailed] = useState(false)

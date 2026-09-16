@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { notify } from '../../utils/notify'
 
 import { registrationSchema } from '../../utils/validators'
-import { FormProvider, useFormContext } from './FormContext'
+import { FormProvider, useRegistrationForm } from './FormContext'
 import PersonalInfo from './sections/PersonalInfo'
 import ProfessionalInfo from './sections/ProfessionalInfo'
 import Speciality from './sections/Speciality'
@@ -15,14 +15,14 @@ import PaymentSection from './sections/PaymentSection'
 import { createPaymentOrder, verifyPayment } from '../../services/api'
 import { formatDate } from '../../utils/formatDate'
 import useRazorpay from '../../hooks/useRazorpay'
+import FlowBusyScreen from '../../components/feedback/FlowBusyScreen'
 
 // ─── Loading Screen ───────────────────────────────────────────────────────────
 const LoadingScreen = () => (
-  <div className="min-h-[60vh] flex flex-col items-center justify-center py-20 px-4">
-    <div className="spinner mb-6" />
-    <h3 className="text-navy font-semibold text-xl mb-2">Processing your registration...</h3>
-    <p className="text-gray-500 text-sm text-center">Please wait. Do not close or refresh this page.</p>
-  </div>
+  <FlowBusyScreen
+    title="Processing your registration..."
+    message="Please wait. Do not close or refresh this page."
+  />
 )
 
 // ─── Success Card ─────────────────────────────────────────────────────────────
@@ -104,7 +104,7 @@ const FailedCard = ({ error, onRetry }) => (
 // ─── Main Form ────────────────────────────────────────────────────────────────
 const RegistrationFormInner = () => {
   const { openPayment } = useRazorpay()
-  const { sessionToken, appliedCoupon, captchaVerified, captchaPassToken, setCaptchaVerified, setCaptchaPassToken, onResetForm } = useFormContext()
+  const { sessionToken, appliedCoupon, captchaVerified, captchaPassToken, setCaptchaVerified, setCaptchaPassToken, onResetForm } = useRegistrationForm()
 
   // null → form | 'loading' → loader | 'success' → success card | 'failed' → failed card
   const [flowStatus, setFlowStatus] = useState(null)

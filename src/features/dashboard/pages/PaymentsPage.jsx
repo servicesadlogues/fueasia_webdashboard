@@ -1,8 +1,8 @@
 import { formatDate } from '../../../utils/formatDate'
-import PageHeader from '../../../components/ui/PageHeader'
+import { EmptyState, PageHeader } from '../../../components/ui'
 import { useDashboard } from '../dashboardContext'
-import { displayValue, formatMoney } from '../utils/labels'
-import { PaymentStatusBadge } from '../components/StatusBadge'
+import { displayValue, formatMoney } from '../../../utils/labels'
+import { PaymentStatusBadge } from '../../../components/ui'
 
 const PaymentsPage = () => {
   const { payments, profile } = useDashboard()
@@ -25,7 +25,10 @@ const PaymentsPage = () => {
       <div className="section-card">
         <div className="section-header">Payment history</div>
         {payments.length === 0 ? (
-          <div className="ds-empty">No payment records are linked to this membership yet.</div>
+          <EmptyState
+            title="No payment records yet"
+            message="No payment records are linked to this membership yet."
+          />
         ) : (
           <div className="ds-table-wrap">
             <table className="ds-table">

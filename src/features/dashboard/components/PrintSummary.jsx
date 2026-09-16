@@ -1,8 +1,7 @@
 import { formatDate } from '../../../utils/formatDate'
-import { formatMoney, membershipTypeLabel, specialityLabel, displayValue } from '../utils/labels'
-import InfoGrid from './InfoGrid'
+import { formatMoney, membershipTypeLabel, specialityLabel, displayValue } from '../../../utils/labels'
+import { InfoGrid, PaymentStatusBadge } from '../../../components/ui'
 import MembershipCard from './MembershipCard'
-import { PaymentStatusBadge } from './StatusBadge'
 
 const PrintSummary = ({ profile, payments }) => {
   if (!profile) return null

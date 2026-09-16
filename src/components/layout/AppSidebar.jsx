@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { BRAND_LOGO_URL } from '../../constants/brand'
 
 const AppSidebar = ({ open, onNavigate, title, subtitle, links, footer }) => (
-  <aside className={`ds-dash-sidebar ${open ? 'is-open' : ''}`}>
+  <aside className={`ds-dash-sidebar ${open ? 'is-open' : ''}`} aria-label={title}>
     <div className="ds-dash-brand">
       <img src={BRAND_LOGO_URL} alt="FUE Global" />
       <div>

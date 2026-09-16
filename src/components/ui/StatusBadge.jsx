@@ -1,4 +1,4 @@
-import { MEMBERSHIP_STATUS_LABELS, PAYMENT_STATUS_LABELS } from '../utils/labels'
+import { MEMBERSHIP_STATUS_LABELS, PAYMENT_STATUS_LABELS } from '../../utils/labels'
 
 const CHIP = {
   active: 'ds-chip ds-chip-success',

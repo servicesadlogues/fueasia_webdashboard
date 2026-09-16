@@ -4,7 +4,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { notify } from '../../utils/notify'
 import { speakerSubmissionSchema } from '../../utils/validators'
 import { submitSpeakerRegistration } from '../../services/api'
-import { FormProvider, useFormContext } from './FormContext'
+import { FormProvider, useSpeakerForm } from './FormContext'
+import FlowBusyScreen from '../../components/feedback/FlowBusyScreen'
 import PersonalInfo from './sections/PersonalInfo'
 import DocumentUpload from './sections/DocumentUpload'
 import ShortBio from './sections/ShortBio'
@@ -12,11 +13,10 @@ import TopicsSection from './sections/TopicsSection'
 import Agreements from './sections/Agreements'
 
 const LoadingScreen = () => (
-  <div className="min-h-[60vh] flex flex-col items-center justify-center py-20 px-4">
-    <div className="spinner mb-6" />
-    <h3 className="text-navy font-semibold text-xl mb-2">Saving your submission...</h3>
-    <p className="text-gray-500 text-sm text-center">Please wait. Do not close or refresh this page.</p>
-  </div>
+  <FlowBusyScreen
+    title="Saving your submission..."
+    message="Please wait. Do not close or refresh this page."
+  />
 )
 
 const SuccessCard = ({ data, onSubmitAnother }) => (
@@ -46,7 +46,7 @@ const SuccessCard = ({ data, onSubmitAnother }) => (
 )
 
 const SpeakerFormInner = () => {
-  const { sessionToken, onResetForm, allRequiredDocsUploaded } = useFormContext()
+  const { sessionToken, onResetForm, allRequiredDocsUploaded } = useSpeakerForm()
   const [flowStatus, setFlowStatus] = useState(null)
   const [flowData, setFlowData] = useState(null)
   const [docError, setDocError] = useState('')

@@ -229,6 +229,11 @@ body:has(.ds-dash) {
   border-radius: var(--glass-radius);
   color: var(--color-muted);
   font-size: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 1rem;
 }
 
 @media (min-width: 768px) {
@@ -256,13 +261,14 @@ body:has(.ds-dash) {
 }
 
 .ds-dash .section-header {
-  background: linear-gradient(135deg, rgba(240, 120, 0, 0.92), rgba(217, 106, 0, 0.88));
+  background: rgba(255, 255, 255, 0.48);
+  color: var(--color-navy);
   backdrop-filter: blur(8px);
-  padding: 0.9rem 1.35rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.95rem 1.35rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .ds-dash .section-body {
@@ -277,13 +283,13 @@ body:has(.ds-dash) {
   border-radius: var(--glass-radius);
   box-shadow: var(--glass-shadow);
   padding: 1.25rem 1.35rem;
-  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  transition: box-shadow 200ms ease, border-color 200ms ease;
 }
 
 .ds-dash a:hover .ds-stat,
 .ds-dash .ds-stat:hover {
   box-shadow: var(--glass-shadow-lg);
-  border-color: rgba(240, 120, 0, 0.25);
+  border-color: rgba(240, 120, 0, 0.28);
 }
 
 .ds-dash .ds-stat-label {
@@ -320,8 +326,24 @@ body:has(.ds-dash) {
   border-bottom: 1px solid var(--glass-border);
 }
 
-.ds-dash .ds-table td {
-  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+.ds-dash .ds-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.ds-dash .ds-quick-link {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: var(--glass-border);
+}
+
+.ds-dash .ds-profile-savebar {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur));
+  border-color: var(--glass-border);
+}
+
+.ds-dash .ds-nav-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .ds-dash .ds-list-card {

@@ -1,6 +1,6 @@
 import { useAdminAuth } from '../../../context/AdminAuthContext'
 import AppTopbar from '../../../components/layout/AppTopbar'
-import { initials } from '../../dashboard/utils/labels'
+import { initials } from '../../../utils/labels'
 
 const AdminTopbar = ({ onMenu }) => {
   const { admin, logout } = useAdminAuth()

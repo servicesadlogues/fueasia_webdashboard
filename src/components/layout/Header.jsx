@@ -3,6 +3,7 @@ import { BRAND_LOGO_URL } from '../../constants/brand'
 
 const Header = ({ subtitle = 'Membership Registration Portal', showSpeakerLink = false }) => (
   <header className="ds-app-header">
+    <a href="#main-content" className="ds-skip-link">Skip to content</a>
     <div className="ds-app-header-inner">
       <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
         <img src={BRAND_LOGO_URL} alt="FUE Global" className="ds-app-logo shrink-0" />

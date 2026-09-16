@@ -7,7 +7,7 @@ import {
   updateAdminConference,
 } from '../../../services/adminApi'
 import { validateConferenceForm } from '../../../utils/adminFormValidation'
-import { ConfirmDialog, ImageUploadField, PageHeader } from '../../../components/ui'
+import { ConfirmDialog, EmptyState, ImageUploadField, PageHeader } from '../../../components/ui'
 import { formatDate, formatDateOnly } from '../../../utils/formatDate'
 
 const TrashIcon = () => (
@@ -188,7 +188,7 @@ const ConferencesPage = () => {
       <div className="section-card">
         <div className="section-header">All conferences</div>
         {loading ? null : !rows.length ? (
-          <div className="ds-empty">No conferences yet.</div>
+          <EmptyState title="No conferences yet" message="Create an event above to show it in the member portal." />
         ) : (
           <div className="ds-table-wrap">
             <table className="ds-table">

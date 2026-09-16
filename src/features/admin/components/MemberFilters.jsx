@@ -1,4 +1,4 @@
-import { SPECIALITY_LABELS, MEMBER_TYPE_LABELS, PAYMENT_STATUS_LABELS } from '../../dashboard/utils/labels'
+import { SPECIALITY_LABELS, MEMBER_TYPE_LABELS, PAYMENT_STATUS_LABELS } from '../../../utils/labels'
 
 const MemberFilters = ({ value, onChange, search, onSearchChange, showType = true }) => {
   const set = (key) => (e) => onChange({ ...value, [key]: e.target.value, page: 1 })

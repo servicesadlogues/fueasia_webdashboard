@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { notify } from '../../../utils/notify'
 import { uploadDocuments } from '../../../services/api'
-import { useFormContext } from '../FormContext'
+import { useRegistrationForm } from '../FormContext'
 
 const DOC_FIELDS = [
   { key: 'medicalCertificate', label: 'Medical Council Registration Certificate' },
@@ -10,7 +10,7 @@ const DOC_FIELDS = [
 ]
 
 const DocumentUpload = () => {
-  const { sessionToken, setDocumentsUploaded, documentsUploaded } = useFormContext()
+  const { sessionToken, setDocumentsUploaded, documentsUploaded } = useRegistrationForm()
   const [files, setFiles] = useState({ medicalCertificate: null, profilePic: null, pgDegree: null })
   const [uploading, setUploading] = useState(false)
   const refs = { medicalCertificate: useRef(), profilePic: useRef(), pgDegree: useRef() }

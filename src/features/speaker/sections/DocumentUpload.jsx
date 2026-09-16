@@ -7,12 +7,12 @@ import {
   validateUploadFile,
 } from '../../../utils/fileUpload'
 import { uploadSpeakerDocuments } from '../../../services/api'
-import { useFormContext } from '../FormContext'
+import { useSpeakerForm } from '../FormContext'
 import { DocumentPreviewBox, DocumentPreviewModal } from '../../../components/ui'
 import { REQUIRED_SPEAKER_DOCS, SPEAKER_DOC_FIELDS } from '../constants'
 
 const DocumentUpload = ({ docError }) => {
-  const { sessionToken, uploadedDocs, markDocsUploaded, clearDocUploaded } = useFormContext()
+  const { sessionToken, uploadedDocs, markDocsUploaded, clearDocUploaded } = useSpeakerForm()
   const [files, setFiles] = useState(() =>
     REQUIRED_SPEAKER_DOCS.reduce((acc, key) => ({ ...acc, [key]: null }), {}),
   )
@@ -21,10 +21,7 @@ const DocumentUpload = ({ docError }) => {
   )
   const [preview, setPreview] = useState({ open: false, title: '', url: '', mimeType: '' })
   const [uploadingKey, setUploadingKey] = useState('')
-  const refs = REQUIRED_SPEAKER_DOCS.reduce((acc, key) => {
-    acc[key] = useRef()
-    return acc
-  }, {})
+  const fileInputRefs = useRef({})
 
   const previewUrlsRef = useRef(previewUrls)
   previewUrlsRef.current = previewUrls
@@ -75,7 +72,7 @@ const DocumentUpload = ({ docError }) => {
     setFiles((prev) => ({ ...prev, [field.key]: null }))
     setPreviewUrl(field.key, null)
     clearDocUploaded(field.key)
-    if (refs[field.key].current) refs[field.key].current.value = ''
+    if (fileInputRefs.current[field.key]) fileInputRefs.current[field.key].value = ''
   }
 
   const handleUpload = async (field) => {
@@ -127,12 +124,12 @@ const DocumentUpload = ({ docError }) => {
                   </label>
 
                   <div className="ds-file-picker-row">
-                    <button type="button" onClick={() => refs[field.key].current.click()}>
+                    <button type="button" onClick={() => fileInputRefs.current[field.key]?.click()}>
                       Choose File
                     </button>
                     <span>{file ? file.name : 'No File Chosen'}</span>
                     <input
-                      ref={refs[field.key]}
+                      ref={(el) => { fileInputRefs.current[field.key] = el }}
                       type="file"
                       accept={field.accept}
                       onChange={handleFileChange(field)}

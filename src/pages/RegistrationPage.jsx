@@ -6,12 +6,12 @@ import RegistrationForm from '../features/registration/RegistrationForm'
 const RegistrationPage = () => (
   <div className="ds-app">
     <Header showSpeakerLink />
-    <main className="ds-app-main">
+    <main id="main-content" className="ds-app-main">
       <div className="w-full max-w-4xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 pb-2">
         <img
           src="/newbanner.jpeg"
           alt="FUE Global Membership - USD $99 | 10% OFF with FUEGLOBALMEMBER"
-          className="w-full object-contain rounded-lg"
+          className="w-full object-contain rounded-xl shadow-sm"
         />
         <div className="ds-login-banner">
           <div>

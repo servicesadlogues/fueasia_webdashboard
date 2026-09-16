@@ -15,7 +15,11 @@ const StatCard = ({ label, value, hint, to, icon: Icon }) => {
       {hint ? <p className="ds-stat-hint">{hint}</p> : null}
     </div>
   )
-  return to ? <Link to={to} className="block no-underline">{inner}</Link> : inner
+  return to ? (
+    <Link to={to} className="block no-underline rounded-[var(--radius-xl)]" aria-label={label}>
+      {inner}
+    </Link>
+  ) : inner
 }
 
 export default StatCard

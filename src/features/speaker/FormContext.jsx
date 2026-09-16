@@ -4,9 +4,9 @@ import { REQUIRED_SPEAKER_DOCS } from './constants'
 const emptyUploadedDocs = () =>
   REQUIRED_SPEAKER_DOCS.reduce((acc, key) => ({ ...acc, [key]: false }), {})
 
-const FormContext = createContext(null)
+const SpeakerFormContext = createContext(null)
 
-export const FormProvider = ({ children, onResetForm }) => {
+export const SpeakerFormProvider = ({ children, onResetForm }) => {
   const [sessionToken] = useState(() => crypto.randomUUID())
   const [uploadedDocs, setUploadedDocs] = useState(emptyUploadedDocs)
 
@@ -27,7 +27,7 @@ export const FormProvider = ({ children, onResetForm }) => {
   const allRequiredDocsUploaded = REQUIRED_SPEAKER_DOCS.every((key) => uploadedDocs[key])
 
   return (
-    <FormContext.Provider value={{
+    <SpeakerFormContext.Provider value={{
       sessionToken,
       uploadedDocs,
       markDocsUploaded,
@@ -36,12 +36,14 @@ export const FormProvider = ({ children, onResetForm }) => {
       onResetForm,
     }}>
       {children}
-    </FormContext.Provider>
+    </SpeakerFormContext.Provider>
   )
 }
 
-export const useFormContext = () => {
-  const ctx = useContext(FormContext)
-  if (!ctx) throw new Error('useFormContext must be used inside FormProvider')
+export const useSpeakerForm = () => {
+  const ctx = useContext(SpeakerFormContext)
+  if (!ctx) throw new Error('useSpeakerForm must be used inside SpeakerFormProvider')
   return ctx
 }
+
+export const FormProvider = SpeakerFormProvider

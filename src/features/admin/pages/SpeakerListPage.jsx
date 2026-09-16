@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { listAdminSpeakers } from '../../../services/adminApi'
 import { isRequestCanceled } from '../../../services/httpFeedback'
 import useDebouncedValue from '../../../hooks/useDebouncedValue'
+import useRequestSequence from '../../../hooks/useRequestSequence'
 import PageHeader from '../../../components/ui/PageHeader'
 import Pagination from '../../../components/ui/Pagination'
 import SpeakerTable from '../components/SpeakerTable'
-import { MEMBER_PAGE_SIZE } from '../constants'
+import { ADMIN_LIST_PAGE_SIZE } from '../constants'
 
 const SpeakerListPage = () => {
   const navigate = useNavigate()
@@ -14,7 +15,7 @@ const SpeakerListPage = () => {
   const [page, setPage] = useState(1)
   const [data, setData] = useState({ speakers: [], total: 0, totalPages: 1, page: 1 })
   const [loading, setLoading] = useState(true)
-  const requestId = useRef(0)
+  const request = useRequestSequence()
   const search = useDebouncedValue(searchInput, 350)
 
   useEffect(() => {
@@ -22,23 +23,23 @@ const SpeakerListPage = () => {
   }, [search])
 
   useEffect(() => {
-    const id = ++requestId.current
+    const id = request.next()
     const controller = new AbortController()
     setLoading(true)
 
     listAdminSpeakers(
-      { search, page, limit: MEMBER_PAGE_SIZE },
+      { search, page, limit: ADMIN_LIST_PAGE_SIZE },
       { signal: controller.signal },
     )
       .then((res) => {
-        if (id !== requestId.current) return
+        if (!request.isLatest(id)) return
         setData(res)
       })
       .catch((err) => {
         if (isRequestCanceled(err)) return
       })
       .finally(() => {
-        if (id === requestId.current) setLoading(false)
+        if (request.isLatest(id)) setLoading(false)
       })
 
     return () => controller.abort()
@@ -71,7 +72,7 @@ const SpeakerListPage = () => {
             page={data.page}
             totalPages={data.totalPages}
             total={data.total}
-            pageSize={MEMBER_PAGE_SIZE}
+            pageSize={ADMIN_LIST_PAGE_SIZE}
             onPage={setPage}
           />
         </div>

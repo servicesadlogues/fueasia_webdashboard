@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from 'react'
 
-const FormContext = createContext(null)
+const RegistrationFormContext = createContext(null)
 
-export const FormProvider = ({ children, onResetForm }) => {
+export const RegistrationFormProvider = ({ children, onResetForm }) => {
   const [sessionToken] = useState(() => crypto.randomUUID())
   const [documentsUploaded, setDocumentsUploaded] = useState(false)
   const [appliedCoupon, setAppliedCoupon] = useState(null)
@@ -10,7 +10,7 @@ export const FormProvider = ({ children, onResetForm }) => {
   const [captchaPassToken, setCaptchaPassToken] = useState('')
 
   return (
-    <FormContext.Provider value={{
+    <RegistrationFormContext.Provider value={{
       sessionToken,
       documentsUploaded, setDocumentsUploaded,
       appliedCoupon, setAppliedCoupon,
@@ -19,12 +19,14 @@ export const FormProvider = ({ children, onResetForm }) => {
       onResetForm,
     }}>
       {children}
-    </FormContext.Provider>
+    </RegistrationFormContext.Provider>
   )
 }
 
-export const useFormContext = () => {
-  const ctx = useContext(FormContext)
-  if (!ctx) throw new Error('useFormContext must be used inside FormProvider')
+export const useRegistrationForm = () => {
+  const ctx = useContext(RegistrationFormContext)
+  if (!ctx) throw new Error('useRegistrationForm must be used inside RegistrationFormProvider')
   return ctx
 }
+
+export const FormProvider = RegistrationFormProvider

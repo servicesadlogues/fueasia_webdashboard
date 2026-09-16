@@ -1,7 +1,7 @@
 import { BRAND_LOGO_URL } from '../../../constants/brand'
 import { formatDate } from '../../../utils/formatDate'
-import { membershipTypeLabel } from '../utils/labels'
-import { MembershipStatusBadge } from './StatusBadge'
+import { membershipTypeLabel } from '../../../utils/labels'
+import { MembershipStatusBadge } from '../../../components/ui'
 
 const MembershipCard = ({ profile }) => (
   <div className="ds-member-card">

@@ -2,7 +2,8 @@ import { BRAND_LOGO_URL, LOGIN_PANEL_IMAGE_URL } from '../../constants/brand'
 
 const AuthSplitLayout = ({ title, subtitle, children }) => (
   <div className="login-shell">
-    <div className="login-frame">
+    <a href="#main-content" className="ds-skip-link">Skip to login</a>
+    <main id="main-content" className="login-frame" tabIndex={-1}>
       <div className="login-panel-image" aria-hidden="true">
         <img src={LOGIN_PANEL_IMAGE_URL} alt="" />
       </div>
@@ -12,7 +13,7 @@ const AuthSplitLayout = ({ title, subtitle, children }) => (
         {subtitle ? <p className="ds-muted text-center mb-6">{subtitle}</p> : <div className="mb-6" />}
         {children}
       </div>
-    </div>
+    </main>
   </div>
 )
 

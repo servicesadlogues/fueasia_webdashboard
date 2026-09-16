@@ -1,6 +1,9 @@
-import { MembershipStatusBadge, PaymentStatusBadge } from '../../dashboard/components/StatusBadge'
+import { EmptyState, ResponsiveRecordList } from '../../../components/ui'
+import { MembershipStatusBadge, PaymentStatusBadge } from '../../../components/ui/StatusBadge'
 import { formatDate } from '../../../utils/formatDate'
-import { formatMoney, membershipTypeLabel } from '../../dashboard/utils/labels'
+import { formatMoney, membershipTypeLabel } from '../../../utils/labels'
+
+const MEMBER_COLUMNS = ['Membership ID', 'Name', 'Type', 'Payment', 'Amount', 'Status', 'Expiry']
 
 const MemberRow = ({ row }) => (
   <>
@@ -40,46 +43,21 @@ const MemberCard = ({ row, onOpen }) => (
   </button>
 )
 
-const MemberTable = ({ members, onOpen }) => {
-  if (!members?.length) {
-    return <div className="ds-empty">No members match these filters.</div>
-  }
-
-  return (
-    <>
-      <div className="space-y-3 md:hidden">
-        {members.map((row) => (
-          <MemberCard key={row.membershipId} row={row} onOpen={onOpen} />
-        ))}
-      </div>
-      <div className="ds-table-wrap hidden md:block">
-        <table className="ds-table">
-          <thead>
-            <tr>
-              <th>Membership ID</th>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Payment</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Expiry</th>
-            </tr>
-          </thead>
-          <tbody>
-            {members.map((row) => (
-              <tr
-                key={row.membershipId}
-                className="cursor-pointer hover:bg-page"
-                onClick={() => onOpen(row.membershipId)}
-              >
-                <MemberRow row={row} />
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </>
-  )
-}
+const MemberTable = ({ members, onOpen }) => (
+  <ResponsiveRecordList
+    items={members}
+    getKey={(row) => row.membershipId}
+    empty={(
+      <EmptyState
+        title="No members found"
+        message="No members match these filters."
+      />
+    )}
+    columns={MEMBER_COLUMNS}
+    renderCard={(row) => <MemberCard row={row} onOpen={onOpen} />}
+    renderRow={(row) => <MemberRow row={row} />}
+    onActivate={(row) => onOpen(row.membershipId)}
+  />
+)
 
 export default MemberTable

@@ -1,4 +1,7 @@
 import { formatDate } from '../../../utils/formatDate'
+import { EmptyState, ResponsiveRecordList } from '../../../components/ui'
+
+const SPEAKER_COLUMNS = ['ID', 'Name', 'Organization', 'Designation', 'Nationality', 'Phone', 'Submitted']
 
 const SpeakerRow = ({ row }) => (
   <>
@@ -36,46 +39,21 @@ const SpeakerCard = ({ row, onOpen }) => (
   </button>
 )
 
-const SpeakerTable = ({ speakers, onOpen }) => {
-  if (!speakers?.length) {
-    return <div className="ds-empty">No speaker submissions yet.</div>
-  }
-
-  return (
-    <>
-      <div className="space-y-3 md:hidden">
-        {speakers.map((row) => (
-          <SpeakerCard key={row.id} row={row} onOpen={onOpen} />
-        ))}
-      </div>
-      <div className="ds-table-wrap hidden md:block">
-        <table className="ds-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Organization</th>
-              <th>Designation</th>
-              <th>Nationality</th>
-              <th>Phone</th>
-              <th>Submitted</th>
-            </tr>
-          </thead>
-          <tbody>
-            {speakers.map((row) => (
-              <tr
-                key={row.id}
-                className="cursor-pointer hover:bg-page"
-                onClick={() => onOpen(row.id)}
-              >
-                <SpeakerRow row={row} />
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </>
-  )
-}
+const SpeakerTable = ({ speakers, onOpen }) => (
+  <ResponsiveRecordList
+    items={speakers}
+    getKey={(row) => row.id}
+    empty={(
+      <EmptyState
+        title="No speaker submissions"
+        message="No speaker submissions yet."
+      />
+    )}
+    columns={SPEAKER_COLUMNS}
+    renderCard={(row) => <SpeakerCard row={row} onOpen={onOpen} />}
+    renderRow={(row) => <SpeakerRow row={row} />}
+    onActivate={(row) => onOpen(row.id)}
+  />
+)
 
 export default SpeakerTable

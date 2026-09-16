@@ -141,7 +141,7 @@ const LoginPage = () => {
       title="Member Login"
       subtitle="Sign in with your Membership ID. We will email a one-time code to your registered address."
     >
-      {error && <p className="alert-danger mb-4" role="alert">{error}</p>}
+      {error && <p id="login-error" className="alert-danger mb-4" role="alert">{error}</p>}
 
       {step === 'id' && (
         <form onSubmit={handleSendOtp} noValidate>
@@ -153,6 +153,8 @@ const LoginPage = () => {
             onChange={(e) => { setMembershipId(e.target.value.toUpperCase()); setError('') }}
             autoComplete="username"
             autoFocus
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? 'login-error' : undefined}
           />
           <button type="submit" className="btn-primary w-full" disabled={sending}>
             {sending ? 'Sending OTP...' : 'Send OTP'}
@@ -193,11 +195,11 @@ const LoginPage = () => {
             >
               {cooldown > 0 ? `Resend OTP in ${cooldown}s` : 'Resend OTP'}
             </button>
-            <button
-              type="button"
-              className="block mx-auto mt-3 ds-muted"
-              onClick={() => { setStep('id'); setOtp(Array(OTP_LENGTH).fill('')); setError('') }}
-            >
+          <button
+            type="button"
+            className="ds-text-btn block mx-auto mt-3 ds-muted hover:text-navy"
+            onClick={() => { setStep('id'); setOtp(Array(OTP_LENGTH).fill('')); setError('') }}
+          >
               Use a different Membership ID
             </button>
           </div>

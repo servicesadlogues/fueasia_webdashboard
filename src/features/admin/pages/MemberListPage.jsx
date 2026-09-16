@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { exportAdminMembers, listAdminMembers } from '../../../services/adminApi'
 import { isRequestCanceled } from '../../../services/httpFeedback'
 import { downloadBlob } from '../../../utils/download'
 import useDebouncedValue from '../../../hooks/useDebouncedValue'
+import useRequestSequence from '../../../hooks/useRequestSequence'
 import PageHeader from '../../../components/ui/PageHeader'
 import Pagination from '../../../components/ui/Pagination'
 import MemberFilters from '../components/MemberFilters'
@@ -24,7 +25,7 @@ const MemberListPage = ({
   const [filters, setFilters] = useState(emptyFilters)
   const [data, setData] = useState({ members: [], total: 0, totalPages: 1, page: 1 })
   const [loading, setLoading] = useState(true)
-  const requestId = useRef(0)
+  const request = useRequestSequence()
   const search = useDebouncedValue(searchInput, 350)
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const MemberListPage = ({
   }, [search])
 
   useEffect(() => {
-    const id = ++requestId.current
+    const id = request.next()
     const controller = new AbortController()
     setLoading(true)
 
@@ -41,14 +42,14 @@ const MemberListPage = ({
       { signal: controller.signal },
     )
       .then((res) => {
-        if (id !== requestId.current) return
+        if (!request.isLatest(id)) return
         setData(res)
       })
       .catch((err) => {
         if (isRequestCanceled(err)) return
       })
       .finally(() => {
-        if (id === requestId.current) setLoading(false)
+        if (request.isLatest(id)) setLoading(false)
       })
 
     return () => controller.abort()

@@ -15,15 +15,17 @@ const Pagination = ({ page = 1, totalPages = 1, total = 0, pageSize = 10, onPage
             type="button"
             className="btn-ghost"
             disabled={page <= 1}
+            aria-label="Previous page"
             onClick={() => onPage(page - 1)}
           >
             Previous
           </button>
-          <span className="ds-caption whitespace-nowrap">Page {page} of {totalPages}</span>
+          <span className="ds-caption whitespace-nowrap" aria-live="polite">Page {page} of {totalPages}</span>
           <button
             type="button"
             className="btn-ghost"
             disabled={page >= totalPages}
+            aria-label="Next page"
             onClick={() => onPage(page + 1)}
           >
             Next

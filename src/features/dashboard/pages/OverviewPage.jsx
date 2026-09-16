@@ -1,12 +1,19 @@
 import { Link } from 'react-router-dom'
-import { Calendar, CreditCard, IdCard } from 'lucide-react'
+import { Calendar, ChevronRight, CreditCard, IdCard } from 'lucide-react'
 import { formatDate } from '../../../utils/formatDate'
-import { Button, PageHeader, SectionCard, StatCard } from '../../../components/ui'
+import { Button, MembershipStatusBadge, PageHeader, PaymentStatusBadge, SectionCard, StatCard } from '../../../components/ui'
 import { useDashboard } from '../dashboardContext'
-import { formatMoney } from '../utils/labels'
+import { formatMoney } from '../../../utils/labels'
 import MembershipCard from '../components/MembershipCard'
 import Avatar from '../components/Avatar'
-import { MembershipStatusBadge, PaymentStatusBadge } from '../components/StatusBadge'
+
+const QUICK_LINKS = [
+  { to: '/home/profile', label: 'View submitted profile' },
+  { to: '/home/membership', label: 'Membership details' },
+  { to: '/home/payments', label: 'Track payment status' },
+  { to: '/home/documents', label: 'Open uploaded documents' },
+  { to: '/home/events', label: 'Upcoming events' },
+]
 
 const OverviewPage = () => {
   const { profile, payments, photoUrl } = useDashboard()
@@ -66,12 +73,13 @@ const OverviewPage = () => {
           <MembershipCard profile={profile} />
         </div>
         <SectionCard title="Quick links" className="mb-0 lg:col-span-2">
-          <div className="flex flex-col gap-3">
-            <Link className="ds-link no-underline font-medium" to="/home/profile">View submitted profile</Link>
-            <Link className="ds-link no-underline font-medium" to="/home/membership">Membership details</Link>
-            <Link className="ds-link no-underline font-medium" to="/home/payments">Track payment status</Link>
-            <Link className="ds-link no-underline font-medium" to="/home/documents">Open uploaded documents</Link>
-            <Link className="ds-link no-underline font-medium" to="/home/events">Upcoming events</Link>
+          <div className="flex flex-col gap-2.5">
+            {QUICK_LINKS.map((item) => (
+              <Link key={item.to} className="ds-quick-link" to={item.to}>
+                <span>{item.label}</span>
+                <ChevronRight size={16} strokeWidth={2} aria-hidden />
+              </Link>
+            ))}
             <p className="ds-caption mt-2">
               Documents were optional at registration. If a file is missing, it was not uploaded.
             </p>

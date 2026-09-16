@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import PageLayout from '../ui/PageLayout'
+import { AdloguesCreditLink, copyrightNotice } from './BrandCredit'
 
 const AppShell = ({ sidebar, topbar, children }) => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -23,12 +24,14 @@ const AppShell = ({ sidebar, topbar, children }) => {
       ) : null}
       {sidebar({ open: menuOpen, onNavigate: () => setMenuOpen(false) })}
       <div className="ds-dash-frame">
+        <a href="#main-content" className="ds-skip-link">Skip to content</a>
         {topbar({ onMenu: () => setMenuOpen(true) })}
-        <main className="ds-dash-main">
+        <main id="main-content" className="ds-dash-main" tabIndex={-1}>
           <PageLayout>{children}</PageLayout>
         </main>
         <footer className="ds-dash-footer">
-          © {new Date().getFullYear()} FUE Global. All rights reserved.
+          <span>{copyrightNotice()}</span>
+          <AdloguesCreditLink />
         </footer>
       </div>
     </div>

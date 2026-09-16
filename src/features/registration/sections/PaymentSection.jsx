@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { notify } from '../../../utils/notify'
 import { getCaptcha, verifyCaptcha, validateCoupon } from '../../../services/api'
-import { useFormContext } from '../FormContext'
+import { useRegistrationForm } from '../FormContext'
 
 const BASE_PRICE_USD = 99
 const PROMO_COUPON = 'FUEGLOBALMEMBER'
 
 const PaymentSection = ({ register, errors }) => {
-  const { appliedCoupon, setAppliedCoupon, captchaVerified, setCaptchaVerified, setCaptchaPassToken } = useFormContext()
+  const { appliedCoupon, setAppliedCoupon, captchaVerified, setCaptchaVerified, setCaptchaPassToken } = useRegistrationForm()
 
   const [couponInput, setCouponInput] = useState('')
   const [couponError, setCouponError] = useState('')
