@@ -13,7 +13,23 @@ export const countrySelectStyles = {
     boxShadow: 'none',
     minHeight: cssToken('--control-h', '42px'),
     fontSize: cssToken('--text-sm', '14px'),
+    paddingLeft: '0.125rem',
+    paddingRight: '0.125rem',
     '&:hover': { borderColor: cssToken('--color-primary', '#F07800') },
+  }),
+  valueContainer: (base) => ({
+    ...base,
+    padding: '0.125rem 0.5rem 0.125rem 0.625rem',
+  }),
+  dropdownIndicator: (base) => ({
+    ...base,
+    padding: '0.5rem 0.75rem 0.5rem 0.375rem',
+    color: cssToken('--color-muted', '#64748b'),
+  }),
+  clearIndicator: (base) => ({
+    ...base,
+    padding: '0.5rem 0.375rem',
+    color: cssToken('--color-muted', '#64748b'),
   }),
   option: (base, state) => ({
     ...base,

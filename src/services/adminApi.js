@@ -40,6 +40,9 @@ export const updateAdminCoupon = (id, body) => adminHttp.patch(`/admin/coupons/$
 export const listAdminSpeakers = (params, config = {}) =>
   adminHttp.get('/admin/speakers', { params, ...config })
 
+export const exportAdminSpeakers = (params) =>
+  adminHttp.get('/admin/speakers/export', { params })
+
 export const getAdminSpeaker = (id) =>
   adminHttp.get(`/admin/speakers/${encodeURIComponent(id)}`)
 
@@ -47,3 +50,6 @@ export const getAdminSpeakerDocuments = (id) =>
   adminHttp.get(`/admin/speakers/${encodeURIComponent(id)}/documents`, {
     skipErrorToast: true,
   })
+
+export const deleteAdminSpeaker = (id) =>
+  adminHttp.delete(`/admin/speakers/${encodeURIComponent(id)}`)

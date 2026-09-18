@@ -8,7 +8,7 @@ const LINKS = [
   { to: '/admin/home/active', label: 'Active', icon: PortalIcons.users },
   { to: '/admin/home/inactive', label: 'Inactive', icon: PortalIcons.users },
   { to: '/admin/home/conferences', label: 'Conferences', icon: PortalIcons.events },
-  { to: '/admin/home/speakers', label: 'Speaker', icon: PortalIcons.speakers },
+  { to: '/admin/home/speakers', label: 'Speakers', icon: PortalIcons.speakers },
   { to: '/admin/home/finance', label: 'Finance', icon: PortalIcons.finance },
   { to: '/admin/home/coupons', label: 'Coupons', icon: PortalIcons.coupons },
 ]

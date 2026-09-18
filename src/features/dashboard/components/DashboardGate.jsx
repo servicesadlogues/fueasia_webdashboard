@@ -1,17 +1,11 @@
-import { useDashboard } from '../dashboardContext'
 import { EmptyState } from '../../../components/ui'
+import { useDashboard } from '../dashboardContext'
 
 const DashboardGate = ({ children }) => {
   const { loading, error, reload } = useDashboard()
 
   if (loading) {
-    return (
-      <EmptyState
-        title="Loading your dashboard"
-        message="Fetching your membership details…"
-        action={<div className="spinner mx-auto" style={{ width: '2.5rem', height: '2.5rem', borderWidth: '3px' }} />}
-      />
-    )
+    return <div className="ds-page-loader-slot" aria-hidden="true" />
   }
 
   if (error) {

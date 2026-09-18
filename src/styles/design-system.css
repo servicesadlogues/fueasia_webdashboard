@@ -44,6 +44,7 @@
   --color-faint: #94a3b8;
   --color-on-brand: #ffffff;
   --color-on-navy: #ffffff;
+  --select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
 
   /* Status */
   --color-success: #15803d;
@@ -303,6 +304,25 @@
     border-color: var(--focus-ring);
   }
   .input-field:disabled { opacity: 0.6; cursor: not-allowed; }
+  select.input-field {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 2.25rem;
+    background-color: var(--color-surface);
+    background-image: var(--select-chevron);
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    cursor: pointer;
+  }
+  select.input-field:focus,
+  select.input-field:focus-visible {
+    background-color: var(--color-surface);
+  }
+  select.input-field:disabled {
+    cursor: not-allowed;
+  }
   .ds-password-field {
     position: relative;
     width: 100%;
@@ -393,6 +413,7 @@
   .btn-danger:disabled,
   .btn-danger-solid:disabled,
   .btn-outline:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+  .btn-primary.is-loading:disabled { opacity: 1; cursor: wait; }
 
   /* Cards */
   .section-card {
@@ -1521,31 +1542,64 @@
 }
 .react-toastify { font-size: var(--text-sm); font-family: var(--font-sans); }
 
-.ds-global-loader {
+.ds-screen-loader {
   position: fixed;
   inset: 0;
-  z-index: 80;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 23, 42, 0.35);
-}
-.ds-global-loader-panel {
+  z-index: 60;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--space-4);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  padding: var(--space-8);
-  min-width: 12rem;
+  padding: 1.5rem;
+  text-align: center;
+  pointer-events: none;
 }
+.ds-screen-loader--blocking {
+  pointer-events: auto;
+  background: rgba(15, 23, 42, 0.25);
+}
+.ds-btn-loader {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.25rem;
+  line-height: 0;
+  overflow: visible;
+}
+.btn-primary .ds-btn-loader {
+  margin: 0 auto;
+}
+.btn-primary .ds-btn-loader svg {
+  display: block;
+  overflow: visible;
+}
+.ds-screen-loader-title,
 .ds-global-loader-text {
   margin: 0;
   color: var(--color-navy);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
+}
+.ds-screen-loader-message {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+.ds-page-loader-slot {
+  min-height: 12rem;
+}
+
+.ds-global-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  background: rgba(15, 23, 42, 0.35);
 }
 .Toastify__toast {
   font-family: var(--font-sans);

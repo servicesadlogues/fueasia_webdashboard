@@ -1,4 +1,5 @@
 import { createHttpClient } from './createHttpClient'
+import { localLoader } from './httpFeedback'
 import { createSessionTokenStore } from '../utils/sessionTokens'
 
 export const ADMIN_TOKEN_KEY = 'fue_admin_token'
@@ -14,7 +15,7 @@ const adminHttp = createHttpClient({
 })
 
 export const loginAdmin = (email, password) =>
-  adminHttp.post('/admin/auth/login', { email, password }, { skipErrorToast: true })
+  adminHttp.post('/admin/auth/login', { email, password }, { skipErrorToast: true, ...localLoader })
 
 export const forgotAdminPassword = (email) =>
   adminHttp.post('/admin/auth/forgot-password', { email }, { skipErrorToast: true })

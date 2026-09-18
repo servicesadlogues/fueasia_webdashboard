@@ -50,7 +50,7 @@ const EventDetailPage = () => {
       </div>
 
       {loading ? (
-        <EmptyState title="Loading event" message="Fetching event details…" />
+        <div className="ds-page-loader-slot" aria-hidden="true" />
       ) : notFound || !event ? (
         <EmptyState
           title="Event unavailable"

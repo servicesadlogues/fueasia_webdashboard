@@ -1,7 +1,5 @@
-const AuthBusy = () => (
-  <div className="login-shell">
-    <div className="spinner" />
-  </div>
-)
+import ScreenLoader from '../feedback/ScreenLoader'
+
+const AuthBusy = () => <ScreenLoader label="Checking session" />
 
 export default AuthBusy

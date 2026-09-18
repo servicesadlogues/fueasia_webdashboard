@@ -66,14 +66,8 @@ const MemberDetailPage = () => {
     }
   }
 
-  if (loading) {
-    return (
-      <EmptyState
-        title="Loading member"
-        message="Fetching profile and documents…"
-      />
-    )
-  }
+  if (loading) return null
+
   if (!member) {
     return (
       <EmptyState

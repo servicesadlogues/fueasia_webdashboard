@@ -459,6 +459,14 @@ body:has(.ds-dash) {
   outline: none;
 }
 
+.ds-dash select.input-field {
+  background-color: #ffffff;
+  background-image: var(--select-chevron);
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+}
+
 .ds-dash .ds-upload-drop {
   background: rgba(255, 255, 255, 0.55);
   border-color: var(--glass-border);
@@ -554,18 +562,16 @@ body:has(.ds-dash) {
 }
 
 /* Glass loader */
+.ds-screen-loader--blocking {
+  background: rgba(15, 23, 42, 0.28);
+  backdrop-filter: blur(6px);
+}
+
 .ds-global-loader {
   background: rgba(15, 23, 42, 0.35);
   backdrop-filter: blur(6px);
 }
 
-.ds-global-loader-panel {
-  background: var(--glass-bg-strong);
-  backdrop-filter: blur(var(--glass-blur-strong));
-  border: 1px solid var(--glass-border);
-  border-radius: var(--glass-radius);
-  box-shadow: var(--glass-shadow-lg);
-}
 
 .ds-dash .ds-link {
   display: inline-flex;

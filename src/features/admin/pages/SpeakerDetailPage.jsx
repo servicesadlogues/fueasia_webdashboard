@@ -45,6 +45,7 @@ const SpeakerDetailPage = () => {
   }, [id])
 
   if (loading) return null
+
   if (!speaker) {
     return <p className="ds-muted">Speaker not found. <Link to="/admin/home/speakers" className="ds-link">Back</Link></p>
   }
@@ -65,7 +66,7 @@ const SpeakerDetailPage = () => {
       <PageHeader
         kicker={<Link to="/admin/home/speakers" className="ds-link">Back to speakers</Link>}
         title={displayName}
-        subtitle={`Submission #${speaker.id}`}
+        subtitle={speaker.speakerId || `Submission #${speaker.id}`}
       />
 
       <div className="section-card">
@@ -73,6 +74,7 @@ const SpeakerDetailPage = () => {
         <div className="section-body">
           <InfoGrid
             items={[
+              { label: 'Speaker ID', value: displayValue(speaker.speakerId) },
               { label: 'Full name', value: displayValue(speaker.fullName) },
               { label: 'Preferred name', value: displayValue(speaker.preferredName) },
               { label: 'Title', value: displayValue(speaker.title) },

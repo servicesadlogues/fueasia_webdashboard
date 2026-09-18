@@ -24,10 +24,10 @@ export const getCaptcha = () => http.get('/captcha', { skipLoader: true });
 export const verifyCaptcha = (data) => http.post('/captcha/verify', data);
 
 export const requestMemberOtp = (membershipId) =>
-  http.post('/auth/request-otp', { membershipId }, { skipErrorToast: true });
+  http.post('/auth/request-otp', { membershipId }, { skipErrorToast: true, ...localLoader });
 
 export const verifyMemberOtp = (membershipId, otp) =>
-  http.post('/auth/verify-otp', { membershipId, otp }, { skipErrorToast: true });
+  http.post('/auth/verify-otp', { membershipId, otp }, { skipErrorToast: true, ...localLoader });
 
 export const logoutMember = () =>
   http

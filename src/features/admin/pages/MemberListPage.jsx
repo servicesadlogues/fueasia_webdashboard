@@ -81,8 +81,12 @@ const MemberListPage = ({
             onSearchChange={setSearchInput}
             showType={showType}
           />
-          <div className={loading && data.members.length ? 'opacity-70' : ''}>
-            <MemberTable members={data.members} onOpen={(id) => navigate(`/admin/home/members/${id}`)} />
+          <div className={loading ? 'opacity-70 pointer-events-none' : ''}>
+            {loading && !data.members.length ? (
+              <div className="ds-page-loader-slot" aria-hidden="true" />
+            ) : (
+              <MemberTable members={data.members} onOpen={(id) => navigate(`/admin/home/members/${id}`)} />
+            )}
           </div>
           <Pagination
             page={data.page}

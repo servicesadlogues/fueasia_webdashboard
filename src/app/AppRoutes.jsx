@@ -4,11 +4,12 @@ import { useAuth } from '../context/AuthContext'
 import { useAdminAuth } from '../context/AdminAuthContext'
 import NotFoundRedirect from '../components/auth/NotFoundRedirect'
 import RouteErrorBoundary from './RouteErrorBoundary'
+import LoginPage from '../pages/LoginPage'
+import AdminLoginPage from '../features/admin/pages/AdminLoginPage'
 import lazyPage from './lazyPage'
 
 const RegistrationPage = lazyPage(() => import('../pages/RegistrationPage'))
 const SpeakerSubmissionPage = lazyPage(() => import('../pages/SpeakerSubmissionPage'))
-const LoginPage = lazyPage(() => import('../pages/LoginPage'))
 const DashboardLayout = lazyPage(() => import('../features/dashboard/DashboardLayout'))
 const OverviewPage = lazyPage(() => import('../features/dashboard/pages/OverviewPage'))
 const ProfilePage = lazyPage(() => import('../features/dashboard/pages/ProfilePage'))
@@ -17,7 +18,6 @@ const PaymentsPage = lazyPage(() => import('../features/dashboard/pages/Payments
 const DocumentsPage = lazyPage(() => import('../features/dashboard/pages/DocumentsPage'))
 const EventsPage = lazyPage(() => import('../features/dashboard/pages/EventsPage'))
 const EventDetailPage = lazyPage(() => import('../features/dashboard/pages/EventDetailPage'))
-const AdminLoginPage = lazyPage(() => import('../features/admin/pages/AdminLoginPage'))
 const AdminForgotPasswordPage = lazyPage(() => import('../features/admin/pages/AdminForgotPasswordPage'))
 const AdminResetPasswordPage = lazyPage(() => import('../features/admin/pages/AdminResetPasswordPage'))
 const AdminLayout = lazyPage(() => import('../features/admin/AdminLayout'))

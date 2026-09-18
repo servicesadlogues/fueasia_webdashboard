@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { isLoaderVisible, subscribeLoader } from '../../feedback/loaderStore'
+import RotatingLinesLoader from './RotatingLinesLoader'
 
 const GlobalLoader = () => {
   const [visible, setVisible] = useState(isLoaderVisible())
@@ -10,10 +11,7 @@ const GlobalLoader = () => {
 
   return (
     <div className="ds-global-loader" role="status" aria-live="polite" aria-label="Loading">
-      <div className="ds-global-loader-panel">
-        <div className="spinner" style={{ width: '2.5rem', height: '2.5rem', borderWidth: '3px' }} />
-        <p className="ds-global-loader-text">Please wait…</p>
-      </div>
+      <RotatingLinesLoader ariaLabel="Loading" />
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { notify } from '../../../utils/notify'
 import AuthSplitLayout from '../../../components/auth/AuthSplitLayout'
-import AuthBusy from '../../../components/auth/AuthBusy'
+import ButtonDotsLoader from '../../../components/feedback/ButtonDotsLoader'
 import { useAdminAuth } from '../../../context/AdminAuthContext'
 import { loginAdmin } from '../../../services/adminHttp'
 import { validateAdminEmail, validateAdminPassword } from '../../../utils/adminAuthValidation'
@@ -19,9 +19,7 @@ const AdminLoginPage = () => {
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
-  if (loading) return <AuthBusy />
-
-  if (isAuthenticated) {
+  if (!loading && isAuthenticated) {
     return <Navigate to={redirectTo} replace />
   }
 
@@ -63,6 +61,7 @@ const AdminLoginPage = () => {
           onChange={(e) => { setEmail(e.target.value); setError('') }}
           autoComplete="username"
           autoFocus
+          disabled={loading || submitting}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? 'admin-login-error' : undefined}
         />
@@ -73,12 +72,17 @@ const AdminLoginPage = () => {
           value={password}
           onChange={(e) => { setPassword(e.target.value); setError('') }}
           autoComplete="current-password"
+          disabled={loading || submitting}
         />
         <div className="mb-4 text-right">
           <Link to="/admin/forgot-password" className="ds-link">Forgot password?</Link>
         </div>
-        <button type="submit" className="btn-primary w-full" disabled={submitting}>
-          {submitting ? 'Signing in...' : 'Log in'}
+        <button
+          type="submit"
+          className={`btn-primary w-full${loading || submitting ? ' is-loading' : ''}`}
+          disabled={loading || submitting}
+        >
+          {loading || submitting ? <ButtonDotsLoader ariaLabel="Signing in" /> : 'Log in'}
         </button>
       </form>
     </AuthSplitLayout>

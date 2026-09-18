@@ -6,8 +6,8 @@ import { useAuth } from '../context/AuthContext'
 import { sanitizeRedirectPath } from '../utils/urls'
 import { normalizeMembershipId, validateMembershipId, validateOtp } from '../utils/authValidation'
 import AuthSplitLayout from '../components/auth/AuthSplitLayout'
-import AuthBusy from '../components/auth/AuthBusy'
 import AuthSwitchLink from '../components/auth/AuthSwitchLink'
+import ButtonDotsLoader from '../components/feedback/ButtonDotsLoader'
 
 const OTP_LENGTH = 6
 
@@ -33,9 +33,7 @@ const LoginPage = () => {
     return () => clearInterval(t)
   }, [cooldown])
 
-  if (loading) return <AuthBusy />
-
-  if (isAuthenticated) {
+  if (!loading && isAuthenticated) {
     return <Navigate to={redirectTo} replace />
   }
 
@@ -153,11 +151,16 @@ const LoginPage = () => {
             onChange={(e) => { setMembershipId(e.target.value.toUpperCase()); setError('') }}
             autoComplete="username"
             autoFocus
+            disabled={loading}
             aria-invalid={Boolean(error)}
             aria-describedby={error ? 'login-error' : undefined}
           />
-          <button type="submit" className="btn-primary w-full" disabled={sending}>
-            {sending ? 'Sending OTP...' : 'Send OTP'}
+          <button
+            type="submit"
+            className={`btn-primary w-full${loading || sending ? ' is-loading' : ''}`}
+            disabled={loading || sending}
+          >
+            {loading || sending ? <ButtonDotsLoader ariaLabel="Sending OTP" /> : 'Send OTP'}
           </button>
         </form>
       )}
@@ -183,8 +186,12 @@ const LoginPage = () => {
               />
             ))}
           </div>
-          <button type="submit" className="btn-primary w-full mb-3" disabled={verifying}>
-            {verifying ? 'Verifying...' : 'Verify OTP'}
+          <button
+            type="submit"
+            className={`btn-primary w-full mb-3${loading || verifying ? ' is-loading' : ''}`}
+            disabled={loading || verifying}
+          >
+            {loading || verifying ? <ButtonDotsLoader ariaLabel="Verifying OTP" /> : 'Verify OTP'}
           </button>
           <div className="text-center">
             <button
