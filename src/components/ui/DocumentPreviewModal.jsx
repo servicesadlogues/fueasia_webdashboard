@@ -1,20 +1,52 @@
+import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
+import { X } from 'lucide-react'
+import IconButton from './IconButton'
+
 const DocumentPreviewModal = ({ open, title, url, mimeType, size = 'default', onClose }) => {
+  useEffect(() => {
+    if (!open) return undefined
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open, onClose])
+
   if (!open || !url) return null
 
   const isPdf = mimeType === 'application/pdf' || /\.pdf$/i.test(title || '')
   const isLarge = size === 'large'
 
-  return (
-    <div className="ds-doc-preview-overlay" onClick={onClose}>
+  return createPortal(
+    <div
+      className={`ds-doc-preview-overlay${isPdf ? ' ds-doc-preview-overlay--pdf' : ''}`}
+      role="dialog"
+      aria-modal="true"
+      aria-label={title || 'Document preview'}
+    >
+      <button
+        type="button"
+        className="ds-doc-preview-backdrop"
+        aria-label="Close preview"
+        onClick={onClose}
+      />
       <div
-        className={`ds-doc-preview-modal${isLarge ? ' ds-doc-preview-modal--large' : ''}`}
-        onClick={(e) => e.stopPropagation()}
+        className={`ds-doc-preview-modal${isLarge ? ' ds-doc-preview-modal--large' : ''}${isPdf ? ' ds-doc-preview-modal--pdf' : ''}`}
       >
         <div className="ds-doc-preview-modal-header">
           <p className="ds-doc-preview-modal-title">{title || 'Preview'}</p>
-          <button type="button" className="btn-ghost !py-1.5 !px-3" onClick={onClose}>
-            Close
-          </button>
+          <IconButton label="Close preview" onClick={onClose}>
+            <X size={18} strokeWidth={2} aria-hidden />
+          </IconButton>
         </div>
         <div className="ds-doc-preview-modal-body">
           {isPdf ? (
@@ -32,7 +64,8 @@ const DocumentPreviewModal = ({ open, title, url, mimeType, size = 'default', on
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
